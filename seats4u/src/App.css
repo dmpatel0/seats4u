@@ -42,6 +42,100 @@
   margin: 10px;
 }
 
+/* STYLING CODE FOR THE VENUES VIEW */
+
+.venues {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  background: lightblue;
+}
+
+.main-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background: lightgray;
+  height: 40px;
+  padding: 10px;
+  margin-bottom: 5px;
+}
+
+.main-bar-btn {
+  width: 100px;
+}
+
+#venue-search-inp {
+  font-size: 20px;
+  width: 40vw;
+  margin: 0px 10px 0px 10px;
+}
+
+#data-container {
+  background: lightcoral;
+  border: 2px solid black;
+  height: 100vh;
+  width: 70vw;
+  overflow-y: auto;
+}
+
+.venue {
+  display: flex;
+  flex-direction: row;   
+  justify-content: space-between; 
+  border: 1px solid white;
+  height: 150px;
+  margin: 5px;
+}
+
+.venue > .info-container, .btn-container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+}
+
+.venue > .btn-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 10%;
+  padding: 10px;
+}
+
+.venue > .info-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+}
+
+.info-container > h3 {
+  margin: 5px;
+}
+
+.venue > .info-container > .show-list {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  overflow-y: auto;
+  background: lightgray;
+  padding: 5px 5px 5px 5px;
+  margin-bottom: 5px;
+}
+
+.venue > .info-container > .show-list > .show {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin: 3px;
+  background: lightpink;
+}
+
+.show > p {
+ margin: 2px;
+}
+
 
 
 

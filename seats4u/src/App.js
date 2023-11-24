@@ -8,11 +8,6 @@ function App() {
 
   return (
     <BrowserRouter>
-        <div>
-          <NavLink to="/">Login</NavLink>
-          <NavLink to="/venues">----Venues</NavLink>
-          <NavLink to="/create-venue">----Create Venue</NavLink>
-        </div>
       <Routes id="main-page">
         <Route path="/" element={<Login />} />
         <Route path="/venues" element={<Venues />} />
