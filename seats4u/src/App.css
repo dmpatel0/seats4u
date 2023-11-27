@@ -138,5 +138,21 @@
 
 /* STYLING CODE FOR THE CREATE VENUE VIEW */
 
+.create-venue {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.create-venue > .form {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding-top: 7%;
+}
 
+.create-venue > .form > div {
+  display: flex;
+  justify-content: space-around;
+}
