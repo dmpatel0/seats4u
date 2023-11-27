@@ -3,7 +3,33 @@ import React from 'react'
 const CreateVenue = () => {
     return (
         <div class="create-venue">
-            <h1>THIS IS THE CREATE VENUE SCREEN</h1>
+            <div class="form">
+                <div id="name">
+                    <h2>NAME</h2>
+                    <input placeholder="Venue Name"></input>
+                </div>
+                <div id="numRows">
+                    <h2>NUMBER OF ROWS</h2>
+                    <input placeholder="Number of Rows"></input>
+                </div>
+                <div id="seatsLeft">
+                    <h2>NUMBER OF LEFT SEATS</h2>
+                    <input placeholder="Number of Left Seats"></input>
+                </div>
+                <div id="seatsCenter">
+                    <h2>NUMBER OF CENTER SEATS</h2>
+                    <input placeholder="Number of Center Seats"></input>
+                </div>
+                <div id="seatsRight">
+                    <h2>NUMBER OF RIGHT SEATS</h2>
+                    <input placeholder="Number of Right Seats"></input>
+                </div>
+                <div id="venuePassword">
+                    <h2>VENUE PASSWORD</h2>
+                    <label>XXXXXXXX</label>
+                </div>
+                <button id="btn-create-venue">CREATE VENUE</button>
+            </div>
         </div>
     )
 }
