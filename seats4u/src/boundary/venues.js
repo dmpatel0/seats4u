@@ -24,6 +24,26 @@ const Venues = () => {
                                 <p>SHOW</p>
                                 <p>01/01/2001</p>
                             </div>
+                            <div class="show">
+                                <p>SHOW</p>
+                                <p>01/01/2001</p>
+                            </div>
+                            <div class="show">
+                                <p>SHOW</p>
+                                <p>01/01/2001</p>
+                            </div>
+                            <div class="show">
+                                <p>SHOW</p>
+                                <p>01/01/2001</p>
+                            </div>
+                            <div class="show">
+                                <p>SHOW</p>
+                                <p>01/01/2001</p>
+                            </div>
+                            <div class="show">
+                                <p>SHOW</p>
+                                <p>01/01/2001</p>
+                            </div>
                         </div>
                     </div>
                     <div class="btn-container">

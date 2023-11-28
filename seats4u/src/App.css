@@ -145,14 +145,29 @@
 }
 
 .create-venue > .form {
-  border: 1px solid black;
   display: flex;
   flex-direction: column;
+  width: 30vw;
   height: 100vh;
   padding-top: 7%;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .create-venue > .form > div {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+}
+
+.create-venue > .form > #venuePassword > label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 7%;
+}
+
+#btn-create-venue {
+  margin-top: 20px;
+  align-self: center;
+  width: 250px;
 }
