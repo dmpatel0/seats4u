@@ -1,22 +1,33 @@
-import React from 'react'
-import { createShow } from '.../controller/controllerVenueManager'
+import React, { useEffect } from 'react'
+import { createShow } from '../controller/controllerVenueManager'
+import { currentVenue } from './venue-view'
 
 function createShowHandler() {
 
+    let venueName = currentVenue;
     let showName = document.getElementById("inp-showName").value;
     let showDate = document.getElementById("inp-showDate").value;
     let showTime = document.getElementById("inp-showTime").value;
     let singlePrice = document.getElementById("inp-singlePrice").value;
 
-    createShow(showName, showDate, showTime, showPrice);
+    createShow(venueName, showName, showDate, showTime, singlePrice);
 }
 
 const CreateShow = () => {
+
+    useEffect(() => {
+        document.getElementById("venue-name-label").innerHTML = currentVenue;
+    })
+
     return (
         <div class="create-show">
             <div class="form">
+                <div id="venueName">
+                    <h2>VENUE NAME</h2>
+                    <label id="venue-name-label"></label>
+                </div>
                 <div id="showName">
-                    <h2>NAME</h2>
+                    <h2>SHOW NAME</h2>
                     <input id="inp-showName" placeholder="Show Name"></input>
                 </div>
                 <div id="showDate">
@@ -25,7 +36,7 @@ const CreateShow = () => {
                 </div>
                 <div id="showTime">
                     <h2>TIME</h2>
-                    <input id="inp-showTime" placeholder="HH-MM:SS in 24 hour clock format"></input>
+                    <input id="inp-showTime" placeholder="HH:MM:SS in 24 hour clock format"></input>
                 </div>
                 <div id="singlePrice">
                     <h2>PRICE</h2>

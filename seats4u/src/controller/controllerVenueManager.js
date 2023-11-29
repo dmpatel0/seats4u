@@ -29,20 +29,23 @@ export function createVenue(venueName, numRows) {
     post(resource, payload, handler);
 }
 
-export function createShow(showName, showDate, showTime, singlePrice) {
-    let name = showName;
+export function createShow(venueName, showName, showDate, showTime, singlePrice) {
+    
+    let vName = venueName;
+    let sName = showName;
     let date = showDate;
     let time = showTime;
     let price = singlePrice;
 
     let resource = '/createShow'
 
-    console.log(name);
+    console.log(vName);
+    console.log(sName);
     console.log(date);
     console.log(time);
     console.log(price);
 
-    let payload = {"showName":name, "showTime":date+" "+time, "showPrice":price}
+    let payload = {"venueName":vName, "showName":sName, "showTime":date+" "+time, "price":price}
 
     const handler = (json) => {
         document.getElementById("api-result").innerHTML = json.statusCode
@@ -77,14 +80,6 @@ export function listVenues() {
         let showsDiv = document.createElement('div'); showsDiv.className="show-list";
         infoDiv.appendChild(showsDiv);
 
-        let show = document.createElement('div'); show.className="show";
-        showsDiv.appendChild(show);
-
-        // Seperate this
-        let showName = document.createElement('p'); showName.id="showName";
-        let showDate = document.createElement('p'); showDate.id="showDate";
-        show.appendChild(showName); show.appendChild(showDate);
-
         return venueDiv;
     }
 
@@ -99,8 +94,35 @@ export function listVenues() {
             let venueNameLabel = venueDiv.firstChild.firstChild; venueNameLabel.innerHTML=venues[i].venueName;
 
             venueDiv.title = venues[i].venueName;
+            
+            let payload = {"venueName":venues[i].venueName};
 
-            venueDiv.firstChild.lastChild.firstChild.firstChild.innerHTML = "TAYLOR SWIFT";
+            const handler = (json) => {
+                if(json.statusCode === 200) {
+                    let shows = json.shows
+                    console.log("show retrieved!")
+                    console.log(`post response: ${json.statusCode}`);
+                    console.log(json);
+                    //let shows = response.shows
+                    for(let j=0; j<shows.length; j++) {
+                        let sName = shows[j].showName;
+                        let sDateTime = shows[j].showTime;
+
+                        let show = document.createElement('div'); show.className="show";
+                        let showName = document.createElement('p'); showName.id="showName"; showName.innerText = sName;
+                        let showDateTime = document.createElement('p'); showDateTime.id="showDate"; showDateTime.innerText = sDateTime;
+                        show.appendChild(showName); show.appendChild(showDateTime);
+
+                        venueDiv.firstChild.lastChild.appendChild(show)
+
+                        console.log(venueDiv)           
+                    }
+                } else {
+                    console.log(json.error)
+                }
+            }
+            
+            post('/listShows', payload, handler)
 
             venueContainer.appendChild(venueDiv);
         }
@@ -128,16 +150,26 @@ export async function deleteVenue(venueName) {
 
 }
 
-export function getPassword(venueName) {
+export function getPassword(venueName, userPass) {
 
     let resource = '/getPassword';
 
     let payload = {"venueName":venueName};
 
     const handler = (json) => {
-        console.log(json.password);
+        if(json.statusCode === 200) {
+            if(userPass === json.password) {
+                console.log(`userpass: ${userPass}, servPass: ${json.password}`)
+                return true;
+            } else {
+                console.log(`userpass: ${userPass}, servPass: ${json.password}`)
+                return false;
+            }
+        } else {
+            console.log(json.error)
+        }
     }
 
     post(resource, payload, handler);
-    
+
 }

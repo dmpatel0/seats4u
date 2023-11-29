@@ -209,11 +209,16 @@
   padding-top: 7%;
   padding-left: 10px;
   padding-right: 10px;
+  border: 1px solid black;
 }
 
 .create-show > .form > div {
   display: flex;
   justify-content: space-between;
+}
+
+.create-show > .form > div > input {
+  width: 50%;
 }
 
 #btn-create-show {
