@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="deletevenue">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lambda/deleteVenue/deletevenue.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

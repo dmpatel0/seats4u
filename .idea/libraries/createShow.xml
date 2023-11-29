@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="createShow">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lambda/createShow/createShow.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

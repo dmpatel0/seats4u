@@ -29,11 +29,11 @@ export function createVenue(venueName, numRows) {
     post(resource, payload, handler);
 }
 
-export function createShow(showName, showDate, showTime, showPrice) {
+export function createShow(showName, showDate, showTime, singlePrice) {
     let name = showName;
     let date = showDate;
     let time = showTime;
-    let price = showPrice;
+    let price = singlePrice;
 
     let resource = '/createShow'
 
@@ -42,7 +42,7 @@ export function createShow(showName, showDate, showTime, showPrice) {
     console.log(time);
     console.log(price);
 
-    let payload = {"showName":name, "showDate":date, "showTime":time, "showPrice":price}
+    let payload = {"showName":name, "showTime":date+" "+time, "showPrice":price}
 
     const handler = (json) => {
         document.getElementById("api-result").innerHTML = json.statusCode
