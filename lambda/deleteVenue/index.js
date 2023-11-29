@@ -28,13 +28,21 @@ exports.handler = async (event) => {
     let response = undefined
     try{
         const result = await DeleteVenue(event.venueName)
-
+        if(!result){
+            response = {
+                statusCode: 400,
+                
+                error: "No rows affected"
+            }
+        }
+        else{
         response = {
             statusCode : 200,
             
             venueName : event.venueName,
 
             success: JSON.stringify(result)
+        }
         }
     }
     catch(err){
@@ -46,4 +54,5 @@ exports.handler = async (event) => {
         pool.end()
     }
     return response
+
 }
