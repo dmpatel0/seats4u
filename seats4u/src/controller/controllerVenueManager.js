@@ -29,6 +29,39 @@ export function createVenue(venueName, numRows) {
     post(resource, payload, handler);
 }
 
+export function createShow(showName, showDate, showTime, showPrice) {
+    let name = showName;
+    let date = showDate;
+    let time = showTime;
+    let price = showPrice;
+
+    let resource = '/createShow'
+
+    console.log(name);
+    console.log(date);
+    console.log(time);
+    console.log(price);
+
+    let payload = {"showName":name, "showDate":date, "showTime":time, "showPrice":price}
+
+    const handler = (json) => {
+        document.getElementById("api-result").innerHTML = json.statusCode
+        if(json.statusCode === 200) {
+            /* REPLACE
+            document.getElementById("label-password").innerHTML = venuePass
+            document.getElementById("api-result").innerHTML = "VENUE CREATED";
+            */
+        } else {
+            /* REPLACE
+            document.getElementById("label-password").innerHTML = "XXXXXXXX"
+            document.getElementById("api-result").innerHTML = json.error.sqlMessage;
+            */
+        }
+    }
+
+    post(resource, payload, handler);
+}
+
 export function listVenues() {
 
     function venueHTML() {

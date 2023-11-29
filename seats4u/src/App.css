@@ -171,3 +171,53 @@
   align-self: center;
   width: 250px;
 }
+
+/* STYLING CODE FOR THE VENUE VIEW VIEW */
+
+.venue-view {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: lightblue;
+}
+
+.venue-view > .buttons {
+  display:flex;
+  flex-direction: column;
+}
+
+.venue-view > .form, .button {
+  display: flex;
+  flex-direction: column;
+}
+
+/* STYLING CODE FOR THE CREATE SHOW VIEW */
+
+.create-show {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.create-show > .form {
+  display: flex;
+  flex-direction: column;
+  width: 30vw;
+  height: 100vh;
+  padding-top: 7%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.create-show > .form > div {
+  display: flex;
+  justify-content: space-between;
+}
+
+#btn-create-show {
+  margin-top: 20px;
+  align-self: center;
+  width: 250px;
+}

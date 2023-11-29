@@ -7,7 +7,6 @@ function createVenueHandler() {
     let numberOfRows = document.getElementById("inp-rows").value;
 
     createVenue(venueName, numberOfRows);
-
 }
 
 const CreateVenue = () => {
