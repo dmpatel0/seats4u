@@ -1,29 +1,13 @@
 import React from 'react'
-import { createVenue, getPassword } from '../controller/controllerVenueManager'
-import { post, get } from "../controller/api"
+import { createVenue } from '../controller/controllerVenueManager'
 
 function createVenueHandler() {
 
     let venueName = document.getElementById("inp-name").value;
     let numberOfRows = document.getElementById("inp-rows").value;
 
-    let resource = '/createVenue'
+    createVenue(venueName, numberOfRows);
 
-    let venuePass = Math.random().toString(36).substring(2,70);
-    document.getElementById("venuePassword").value = venuePass
-
-    console.log(venuePass);
-    console.log(venueName);
-    console.log(numberOfRows);
-
-    let payload = {"venueName":venueName, "numRows":numberOfRows, "password":venuePass}
-
-    const handler = (json) => {
-        document.getElementById("api-result").value = json.body
-    }
-
-    post(resource, payload, handler)
-    
 }
 
 const CreateVenue = () => {
@@ -52,9 +36,8 @@ const CreateVenue = () => {
                 </div>
                 <div id="venuePassword">
                     <h2>VENUE PASSWORD</h2>
-                    <label>XXXXXXXX</label>
+                    <label id="label-password">XXXXXXXX</label>
                 </div>
-                <button id="btn-check-pass" onClick={() => {getPassword(document.getElementById("inp-name").value)}}>GET PASSWORD</button>
                 <button id="btn-create-venue" onClick={() => {createVenueHandler()}}>CREATE VENUE</button>
                 <p id="api-result"></p>
             </div>
