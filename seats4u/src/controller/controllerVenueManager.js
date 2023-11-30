@@ -85,49 +85,52 @@ export function listVenues() {
 
     get('/listVenuesAdmin')
     .then(function (response) {
+        
+        if(response.statusCode === 200) {
+            let venueContainer = document.getElementById("venues-data-container");
+            let venues = response.venues;
 
-        let venueContainer = document.getElementById("venues-data-container");
-        let venues = response.venues;
+            for(let i=0; i<venues.length; i++) {
+                let venueDiv = venueHTML();
+                let venueNameLabel = venueDiv.firstChild.firstChild; venueNameLabel.innerHTML=venues[i].venueName;
 
-        for(let i=0; i<venues.length; i++) {
-            let venueDiv = venueHTML();
-            let venueNameLabel = venueDiv.firstChild.firstChild; venueNameLabel.innerHTML=venues[i].venueName;
+                venueDiv.title = venues[i].venueName;
+                
+                let payload = {"venueName":venues[i].venueName};
 
-            venueDiv.title = venues[i].venueName;
-            
-            let payload = {"venueName":venues[i].venueName};
+                const handler = (json) => {
+                    if(json.statusCode === 200) {
+                        let shows = json.shows
+                        console.log("show retrieved!")
+                        console.log(`post response: ${json.statusCode}`);
+                        console.log(json);
+                        //let shows = response.shows
+                        for(let j=0; j<shows.length; j++) {
+                            let sName = shows[j].showName;
+                            let sDateTime = shows[j].showTime;
 
-            const handler = (json) => {
-                if(json.statusCode === 200) {
-                    let shows = json.shows
-                    console.log("show retrieved!")
-                    console.log(`post response: ${json.statusCode}`);
-                    console.log(json);
-                    //let shows = response.shows
-                    for(let j=0; j<shows.length; j++) {
-                        let sName = shows[j].showName;
-                        let sDateTime = shows[j].showTime;
+                            let show = document.createElement('div'); show.className="show";
+                            let showName = document.createElement('p'); showName.id="showName"; showName.innerText = sName;
+                            let showDateTime = document.createElement('p'); showDateTime.id="showDate"; showDateTime.innerText = sDateTime;
+                            show.appendChild(showName); show.appendChild(showDateTime);
 
-                        let show = document.createElement('div'); show.className="show";
-                        let showName = document.createElement('p'); showName.id="showName"; showName.innerText = sName;
-                        let showDateTime = document.createElement('p'); showDateTime.id="showDate"; showDateTime.innerText = sDateTime;
-                        show.appendChild(showName); show.appendChild(showDateTime);
+                            venueDiv.firstChild.lastChild.appendChild(show)
 
-                        venueDiv.firstChild.lastChild.appendChild(show)
-
-                        console.log(venueDiv)           
+                            console.log(venueDiv)           
+                        }
+                    } else {
+                        console.log(json.error)
                     }
-                } else {
-                    console.log(json.error)
                 }
-            }
-            
-            post('/listShows', payload, handler)
+                
+                post('/listShows', payload, handler)
 
-            venueContainer.appendChild(venueDiv);
+                venueContainer.appendChild(venueDiv);
+            }
         }
 
     })
+
 }
 
 export async function deleteVenue(venueName) {

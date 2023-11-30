@@ -1,3 +1,12 @@
+/* COLORS */
+:root {
+  --black: #000000;
+  --midnight-blue: #1b263b;
+  --silver-blue: #415a77;
+  --clay-blue: #778da9;
+  --pale-white: #e0e1dd;
+}
+
 /* STYLING CODE FOR THE LOGIN VIEW */
 
 .login {
@@ -6,12 +15,22 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: lightblue;
+  background: var(--midnight-blue);
 }
 
 .login > .buttons {
   display:flex;
   flex-direction: column;
+}
+
+.login > .form {
+  background-color: var(--silver-blue);
+  margin-bottom: 10px;
+}
+
+#txt-or {
+  text-align: center;
+  color: var(--pale-white);
 }
 
 .login > .form, .buttons {
@@ -27,15 +46,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  border: 2px solid black;
-}
-
-.login > .form > .username {
-  margin-bottom: 2px;
-}
-
-.login > .form > .password {
-  margin-bottom: 2px;
+  border: 2px solid white;
 }
 
 #username-label, #username-input, #password-label, #password-input {
@@ -49,17 +60,22 @@
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  background: lightblue;
+  background: var(--midnight-blue);
+}
+
+.venues > #title {
+  color: var(--pale-white);
 }
 
 .main-bar {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  background: lightgray;
+  background: var(--silver-blue);
   height: 40px;
   padding: 10px;
   margin-bottom: 5px;
+  border: 1px solid white;
 }
 
 .main-bar-btn {
@@ -73,7 +89,7 @@
 }
 
 #venues-data-container {
-  background: lightcoral;
+  background: var(--silver-blue);
   border: 2px solid black;
   height: 100vh;
   width: 70vw;
@@ -89,18 +105,12 @@
   margin: 5px;
 }
 
-.venue > .info-container, .btn-container {
-  display: flex;
-  flex-direction: column;
+.venue > .info-container > h3 {
+  background: rgb(50, 50, 50);
+  width: 100%;
+  text-align: center;
   border: 1px solid black;
-}
-
-.venue > .btn-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  width: 10%;
-  padding: 10px;
+  color: var(--pale-white);
 }
 
 .venue > .info-container {
@@ -120,8 +130,6 @@
   width: 75%;
   overflow-y: auto;
   background: lightgray;
-  padding: 5px 5px 5px 5px;
-  margin-bottom: 5px;
 }
 
 .venue > .info-container > .show-list > .show {
@@ -129,7 +137,7 @@
   flex-direction: row;
   justify-content: space-evenly;
   margin: 3px;
-  background: lightpink;
+  background: var(--silver-blue);
 }
 
 .show > p {

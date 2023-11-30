@@ -8,13 +8,22 @@ function listVenuesHandler() {
 
     let parent = document.getElementById("venues-data-container");
     let child = parent.lastElementChild;
+
+    let refresh_btn = document.getElementById("btn-refresh");
+    refresh_btn.disabled = true;
+
+
+    setTimeout(() => {
+        refresh_btn.disabled = false;
+    }, 2500)
+
     while(child) {
         parent.removeChild(child);
         child = parent.lastElementChild;
     }
 
     listVenues();
-    console.log("listVenues Called");
+    console.log("list venues called");
 
 }
 
@@ -94,7 +103,7 @@ const Venues = () => {
             <h1 id="title">VENUES</h1>
             <div className="main-bar">
                 <button className="main-bar-btn" onClick={() => {navigate('/create-venue')}}>CREATE</button>
-                <button className="main-bar-btn" onClick={() => {listVenuesHandler()}}>REFRESH</button>
+                <button id="btn-refresh" className="main-bar-btn" onClick={() => {listVenuesHandler()}}>REFRESH</button>
                 <input id="venue-search-inp" placeholder="Search By Full Or Partial Venue Name"></input>
                 <button className="main-bar-btn" onClick={() => {(manageVenueHandler(navigate))}}>MANAGE</button>
                 <button className="main-bar-btn" onClick={() => {deleteVenueHandler()}}>DELETE</button>

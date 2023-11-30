@@ -29,6 +29,7 @@ const Login = () => {
             
             <div class="buttons">
                 <button id="admin-btn" onClick={checkCredentials}>SIGN IN AS ADMIN</button>
+                <p id="txt-or">OR</p>
                 <button id="guest-btn" onClick={() => {navigate('/venues')}}>CONTINUE AS CONSUMER</button>
             </div>
         </div>
