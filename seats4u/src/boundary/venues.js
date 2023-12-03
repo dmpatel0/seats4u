@@ -4,7 +4,7 @@ import { deleteVenue, listVenues, getPassword } from '../controller/controllerVe
 import { getVenueHandler } from '../boundary/venue-view'
 import { get } from '../controller/api';
 
-function listVenuesHandler() {
+async function listVenuesHandler() {
 
     let parent = document.getElementById("venues-data-container");
     let child = parent.lastElementChild;
@@ -12,34 +12,38 @@ function listVenuesHandler() {
     let refresh_btn = document.getElementById("btn-refresh");
     refresh_btn.disabled = true;
 
-
-    setTimeout(() => {
-        refresh_btn.disabled = false;
-    }, 2500)
-
     while(child) {
         parent.removeChild(child);
         child = parent.lastElementChild;
     }
 
-    listVenues();
-    console.log("list venues called");
-
+    let sCode = await listVenues();
+    console.log(sCode)
+    refresh_btn.disabled = false;
+    
 }
 
-function deleteVenueHandler() {
+async function deleteVenueHandler() {
 
     console.log("delete called")
-    //let parentVenue = this.parentElement.parentElement.title
+    let exists = false;
     let venueName = document.getElementById("venue-search-inp").value
     
-    async function refreshVenues() {
-        await deleteVenue(venueName);
-        listVenuesHandler();
-        console.log("DELETE");
+    let allVenues = document.getElementById("venues-data-container").children
+    for(let i=0; i<allVenues.length; i++) {
+        if(venueName === allVenues[i].title) {
+            exists = true;
+            break;
+        }
     }
-
-    refreshVenues();
+    if(exists) {
+        let sCode = await deleteVenue(venueName);
+        listVenuesHandler();
+    } else {
+        alert("VENUE DOES NOT EXIST!");
+    }
+    
+    
 }
 
 async function manageVenueHandler(navigate) {
@@ -49,7 +53,6 @@ async function manageVenueHandler(navigate) {
 
     let allVenues = document.getElementById("venues-data-container").children
     for(let i=0; i<allVenues.length; i++) {
-        console.log(`venue: ${allVenues[i].title}`)
         if(venue === allVenues[i].title) {
             exists = true;
             break;

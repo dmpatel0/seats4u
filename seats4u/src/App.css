@@ -102,7 +102,7 @@
   justify-content: center; 
   border: 1px solid white;
   height: 150px;
-  margin: 5px;
+  margin: 5px 0px 5px 0px;
 }
 
 .venue > .info-container > h3 {
@@ -129,19 +129,22 @@
   flex-direction: column;
   width: 75%;
   overflow-y: auto;
-  background: lightgray;
+  background: var(--clay-blue);
+  border: 3px solid black;
 }
 
 .venue > .info-container > .show-list > .show {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  margin: 3px;
+  border: 1px solid black;
   background: var(--silver-blue);
 }
 
 .show > p {
  margin: 2px;
+ color: var(--pale-white);
+ text-decoration: solid;
 }
 
 /* STYLING CODE FOR THE CREATE VENUE VIEW */

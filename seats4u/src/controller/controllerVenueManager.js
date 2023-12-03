@@ -1,3 +1,4 @@
+import { json } from "react-router-dom";
 import { post, get } from "./api"
 
 export function createVenue(venueName, numRows) {
@@ -114,9 +115,7 @@ export function listVenues() {
                             let showDateTime = document.createElement('p'); showDateTime.id="showDate"; showDateTime.innerText = sDateTime;
                             show.appendChild(showName); show.appendChild(showDateTime);
 
-                            venueDiv.firstChild.lastChild.appendChild(show)
-
-                            console.log(venueDiv)           
+                            venueDiv.firstChild.lastChild.appendChild(show)          
                         }
                     } else {
                         console.log(json.error)
@@ -129,11 +128,15 @@ export function listVenues() {
             }
         }
 
+        return new Promise(function (resolve, reject) {
+            resolve(200);
+        })
+
     })
 
 }
 
-export async function deleteVenue(venueName) {
+export function deleteVenue(venueName) {
 
     let name = venueName;
     let resource = '/deleteVenue';
@@ -141,12 +144,13 @@ export async function deleteVenue(venueName) {
     let payload = {"venueName":name};
 
     const handler = (json) => {
-        if(json.statusCode === 200) {
-            alert("Venue Deleted");
-            return 1;
-        } else {
-            return 0;
-        }
+        return new Promise(function (resolve, reject) {
+            if(json.statusCode === 200) {
+                resolve(json.statusCode);
+            } else {
+                reject(json.error);
+            }
+        })
     }
 
     post(resource, payload, handler);
