@@ -1,5 +1,6 @@
 import { json } from "react-router-dom";
 import { post, get } from "./api"
+import { listVenuesHandler } from "../boundary/venues";
 
 export function createVenue(venueName, numRows) {
 
@@ -127,11 +128,10 @@ export function listVenues() {
                 venueContainer.appendChild(venueDiv);
             }
         }
-
-        return new Promise(function (resolve, reject) {
-            resolve(200);
-        })
-
+    })
+    .then(() => {
+        let refresh_btn = document.getElementById("btn-refresh")
+        refresh_btn.disabled = false;
     })
 
 }
@@ -144,17 +144,15 @@ export function deleteVenue(venueName) {
     let payload = {"venueName":name};
 
     const handler = (json) => {
-        return new Promise(function (resolve, reject) {
-            if(json.statusCode === 200) {
-                resolve(json.statusCode);
-            } else {
-                reject(json.error);
-            }
-        })
+        if(json.statusCode === 200) {
+            console.log("delete successful");
+            listVenuesHandler()
+        } else {
+            console.log(`error: ${json.error}`)
+        }
     }
 
-    post(resource, payload, handler);
-
+    post(resource, payload, handler)
 }
 
 export function getPassword(venueName, userPass) {

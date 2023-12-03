@@ -4,22 +4,20 @@ import { deleteVenue, listVenues, getPassword } from '../controller/controllerVe
 import { getVenueHandler } from '../boundary/venue-view'
 import { get } from '../controller/api';
 
-async function listVenuesHandler() {
+export async function listVenuesHandler() {
 
     let parent = document.getElementById("venues-data-container");
     let child = parent.lastElementChild;
 
     let refresh_btn = document.getElementById("btn-refresh");
-    refresh_btn.disabled = true;
+    refresh_btn.disabled = true; console.log("disabled");
 
     while(child) {
         parent.removeChild(child);
         child = parent.lastElementChild;
     }
 
-    let sCode = await listVenues();
-    console.log(sCode)
-    refresh_btn.disabled = false;
+    listVenues();
     
 }
 
@@ -36,14 +34,12 @@ async function deleteVenueHandler() {
             break;
         }
     }
+ 
     if(exists) {
-        let sCode = await deleteVenue(venueName);
-        listVenuesHandler();
+        deleteVenue(venueName)
     } else {
         alert("VENUE DOES NOT EXIST!");
     }
-    
-    
 }
 
 async function manageVenueHandler(navigate) {

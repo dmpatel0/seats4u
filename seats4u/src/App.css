@@ -149,6 +149,14 @@
 
 /* STYLING CODE FOR THE CREATE VENUE VIEW */
 
+.btn-back {
+  position: absolute;
+  top: 30px;
+  left: 40px;
+  width: 50px;
+  height: 20px;
+}
+
 .create-venue {
   display: flex;
   justify-content: center;

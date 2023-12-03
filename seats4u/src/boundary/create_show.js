@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { createShow } from '../controller/controllerVenueManager'
 import { currentVenue } from './venue-view'
+import { useNavigate } from 'react-router-dom';
 
 function createShowHandler() {
 
@@ -15,12 +16,15 @@ function createShowHandler() {
 
 const CreateShow = () => {
 
+    const navigate = useNavigate()
+
     useEffect(() => {
         document.getElementById("venue-name-label").innerHTML = currentVenue;
     })
 
     return (
         <div class="create-show">
+            <button id="btn-back-create-venue" class="btn-back" onClick={() => {navigate('/venue-view')}}>BACK</button>
             <div class="form">
                 <div id="venueName">
                     <h2>VENUE NAME</h2>

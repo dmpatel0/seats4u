@@ -1,5 +1,6 @@
 import React from 'react'
 import { createVenue } from '../controller/controllerVenueManager'
+import { useNavigate } from 'react-router-dom';
 
 function createVenueHandler() {
 
@@ -10,8 +11,13 @@ function createVenueHandler() {
 }
 
 const CreateVenue = () => {
+
+    const navigate = useNavigate();
+
+
     return (
         <div class="create-venue">
+            <button id="btn-back-create-venue" class="btn-back" onClick={() => {navigate('/venues')}}>BACK</button>
             <div class="form">
                 <div id="name">
                     <h2>NAME</h2>

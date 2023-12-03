@@ -5,8 +5,6 @@ export let currentVenue;
 
 export function getVenueHandler(venue) {
     currentVenue = venue;
-    //document.getElementById('view-container').appendChild(venueLabel);
-    //.getElementById("venue-view-name").innerText = currentVenue;
 }
 
 const VenueView = () => {
@@ -20,6 +18,7 @@ const VenueView = () => {
 
     return (
         <div id="view-container" className="venue-view">
+            <button id="btn-back-create-venue" class="btn-back" onClick={() => {navigate('/venues')}}>BACK</button>
             <h1 id="venue-view-name">WPI</h1>
             <button id="create-show" onClick={() => {navigate('/create-show')}}>CREATE SHOW</button>
         </div>
