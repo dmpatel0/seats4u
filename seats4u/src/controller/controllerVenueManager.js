@@ -124,6 +124,10 @@ export function listVenues() {
                         for(let j=0; j<shows.length; j++) {
                             let sName = shows[j].showName;
                             let sDateTime = shows[j].showTime;
+                            sDateTime = sDateTime.replace('T', " --- ");
+                            sDateTime = sDateTime.replace('Z', "");
+                            sDateTime = sDateTime.substring(0, 20);
+
 
                             let show = document.createElement('div'); show.className="show";
                             let showName = document.createElement('p'); showName.id="showName"; showName.innerText = sName;

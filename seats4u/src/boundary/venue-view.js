@@ -23,6 +23,7 @@ export function refreshHandler() {
     }
 
     listShows(currentVenue);
+
 }
 
 const VenueView = () => {
@@ -35,16 +36,17 @@ const VenueView = () => {
     //document.getElementById("venue-view-name").innerHTML = venueName;
     const navigate = useNavigate();
 
+
     return (
         <div id="view-container" className="venue-view">
             <button id="btn-back-create-venue" class="btn-back" onClick={() => {navigate('/venues')}}>BACK</button>
             <h1 id="venue-view-name">WPI</h1>
             <div id="venue-view-buttons">
-                    <button id="create-show" onClick={() => {navigate('/create-show')}}>CREATE SHOW</button>
-                    <button>DELETE SHOW</button>
-                    <button>ACTIVATE SHOW</button>
-                    <button>EDIT BLOCKS</button>
-                    <button id="venue-view-btn-refresh" onClick={() => {refreshHandler()}}>REFRESH</button>
+                    <button id="create-show" disabled="true" onClick={() => {navigate('/create-show')}}>CREATE SHOW</button>
+                    <button disabled="true" id="delete-show-btn">DELETE SHOW</button>
+                    <button disabled="true" id="activate-show-btn">ACTIVATE SHOW</button>
+                    <button disabled="true" id="edit-blocks-btn">EDIT BLOCKS</button>
+                    <button disabled="true"id="venue-view-btn-refresh" onClick={() => {refreshHandler()}}>REFRESH</button>
             </div>
             <div id="venue-view-content">
                 <div id="venue-view-show-div">
