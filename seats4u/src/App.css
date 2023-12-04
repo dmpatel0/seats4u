@@ -7,6 +7,10 @@
   --pale-white: #e0e1dd;
 }
 
+button:hover {
+  cursor: pointer;
+}
+
 /* STYLING CODE FOR THE LOGIN VIEW */
 
 .login {
@@ -247,6 +251,18 @@
 #venue-view-show-list > .show {
   font-size: 20px;
   margin: 2px;
+  text-align: center;
+  width: 95%;
+  border: 1px solid black;
+  background: var(--clay-blue);
+}
+
+#venue-view-show-list > .show:hover {
+  cursor: pointer;
+}
+
+#venue-view-show-list > .show > #showName {
+  color: black;
 }
 
 #venue-view-content > #venue-view-show-div {

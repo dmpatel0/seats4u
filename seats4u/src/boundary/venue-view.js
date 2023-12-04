@@ -29,6 +29,7 @@ const VenueView = () => {
 
     useEffect(() => {
         document.getElementById("venue-view-name").innerHTML = currentVenue;
+        refreshHandler()
     }, []);
     
     //document.getElementById("venue-view-name").innerHTML = venueName;

@@ -152,6 +152,17 @@ export function listVenues() {
 }
 
 export function listShows(venueName) {
+
+    function depressSelected(depressElement) {
+        let shows = document.getElementById("venue-view-show-list").children;
+
+        for(let i=0; i<shows.length; i++) {
+            shows[i].borderColor = "#ffffff";
+            console.log(shows[i].firstChild.innerText)
+        }
+
+        depressElement.background = "#ffffff";
+    }
     
     let payload = {"venueName":venueName};
 
@@ -162,7 +173,13 @@ export function listShows(venueName) {
             for(let i = 0; i<shows.length; i++) {
                 let sName = shows[i].showName;
                 
-                let show = document.createElement('div'); show.className="show"
+                let show = document.createElement('div'); show.className="show";
+
+                show.onclick=(() => {
+                    depressSelected(show)
+                    alert(`Clicked on show: ${show.firstElementChild.innerText}`)
+                });
+
                 let showName = document.createElement('p'); showName.id="showName"; showName.innerText=sName; 
 
                 show.appendChild(showName);
