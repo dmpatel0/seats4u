@@ -10,7 +10,8 @@ export function getVenueHandler(venue) {
 
 export function refreshHandler() {
 
-    let parent = document.getElementById("venues-view-show-list");
+    let parent = document.getElementById("venue-view-show-list");
+    console.log(parent)
     let child = parent.lastElementChild;
 
     let refresh_btn = document.getElementById("venue-view-btn-refresh");
@@ -42,12 +43,14 @@ const VenueView = () => {
                     <button>DELETE SHOW</button>
                     <button>ACTIVATE SHOW</button>
                     <button>EDIT BLOCKS</button>
-                    <button id="venue-view-btn-refresh">REFRESH</button>
+                    <button id="venue-view-btn-refresh" onClick={() => {refreshHandler()}}>REFRESH</button>
             </div>
             <div id="venue-view-content">
                 <div id="venue-view-show-div">
                     <h2>CURRENT SHOWS</h2>
-                    <div id="venue-view-show-list"></div>
+                    <div id="venue-view-show-list">
+                        <div></div>
+                    </div>
                 </div>
                 <div id="seats-view">
                     <div id="seats-div">

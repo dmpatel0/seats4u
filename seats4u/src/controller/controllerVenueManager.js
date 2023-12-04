@@ -169,7 +169,8 @@ export function listShows(venueName) {
 
                 document.getElementById("venue-view-show-list").appendChild(show);
             }
-
+            
+            document.getElementById("venue-view-btn-refresh").disabled = false;
         }
     }
 

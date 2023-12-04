@@ -54,10 +54,14 @@ async function manageVenueHandler(navigate) {
             break;
         }
     }
+
     if(exists) {
 
         let userPass = prompt("What is the venue password?");
-        checkPassword(venue, userPass, navigate)
+
+        if(userPass !== null) {
+            checkPassword(venue, userPass, navigate)
+        }
 
     } else {
         alert("VENUE DOES NOT EXIST!");
