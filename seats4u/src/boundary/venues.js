@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { deleteVenue, listVenues, getPassword } from '../controller/controllerVenueManager'
+import { deleteVenue, listVenues, checkPassword } from '../controller/controllerVenueManager'
 import { getVenueHandler } from '../boundary/venue-view'
 import { get } from '../controller/api';
 
@@ -56,17 +56,9 @@ async function manageVenueHandler(navigate) {
     }
     if(exists) {
 
-        getVenueHandler(venue);
-        navigate('/venue-view');
-        /*let inputPass = prompt("Enter Venue Password");
-        let matched = await getPassword(venue, inputPass);
+        let userPass = prompt("What is the venue password?");
+        checkPassword(venue, userPass, navigate)
 
-        if(matched) {
-            getVenueHandler(venue);
-            navigate('/venue-view');  
-        } else {
-            alert("INCORRECT PASSWORD")
-        }*/
     } else {
         alert("VENUE DOES NOT EXIST!");
     }

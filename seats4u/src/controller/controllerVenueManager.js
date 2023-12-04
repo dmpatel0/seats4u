@@ -1,6 +1,7 @@
-import { json } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { post, get } from "./api"
 import { listVenuesHandler } from "../boundary/venues";
+import { getVenueHandler } from "../boundary/venue-view";
 
 export function createVenue(venueName, numRows) {
 
@@ -96,17 +97,30 @@ export function listVenues() {
                 let venueDiv = venueHTML();
                 let venueNameLabel = venueDiv.firstChild.firstChild; venueNameLabel.innerHTML=venues[i].venueName;
 
+                /* REMOVE JUST FOR TESTING */
+
+                const passHandler= (json) => {
+                    if(json.statusCode === 200) {
+                        console.log(`Venue: ${venues[i].venueName} -- Password: ${json.password}`);
+                    } else {
+                        console.log(`Venue: ${venues[i].venueName} -- ERROR`);
+                    }
+                }
+
+                post('/getPassword', {"venueName":venues[i].venueName}, passHandler)
+
+
+                /* END REMOVE */
+
                 venueDiv.title = venues[i].venueName;
                 
                 let payload = {"venueName":venues[i].venueName};
 
                 const handler = (json) => {
                     if(json.statusCode === 200) {
+
                         let shows = json.shows
-                        console.log("show retrieved!")
-                        console.log(`post response: ${json.statusCode}`);
-                        console.log(json);
-                        //let shows = response.shows
+
                         for(let j=0; j<shows.length; j++) {
                             let sName = shows[j].showName;
                             let sDateTime = shows[j].showTime;
@@ -118,6 +132,7 @@ export function listVenues() {
 
                             venueDiv.firstChild.lastChild.appendChild(show)          
                         }
+
                     } else {
                         console.log(json.error)
                     }
@@ -133,6 +148,32 @@ export function listVenues() {
         let refresh_btn = document.getElementById("btn-refresh")
         refresh_btn.disabled = false;
     })
+
+}
+
+export function listShows(venueName) {
+    
+    let payload = {"venueName":venueName};
+
+    const handler = (json) => {
+        if(json.statusCode === 200) {
+            let shows = json.shows
+
+            for(let i = 0; i<shows.length; i++) {
+                let sName = shows[i].showName;
+                
+                let show = document.createElement('div'); show.className="show"
+                let showName = document.createElement('p'); showName.id="showName"; showName.innerText=sName; 
+
+                show.appendChild(showName);
+
+                document.getElementById("venue-view-show-list").appendChild(show);
+            }
+
+        }
+    }
+
+    post('/listShows', payload, handler); 
 
 }
 
@@ -155,7 +196,7 @@ export function deleteVenue(venueName) {
     post(resource, payload, handler)
 }
 
-export function getPassword(venueName, userPass) {
+export function checkPassword(venueName, userPass, navFunc) {
 
     let resource = '/getPassword';
 
@@ -164,11 +205,11 @@ export function getPassword(venueName, userPass) {
     const handler = (json) => {
         if(json.statusCode === 200) {
             if(userPass === json.password) {
-                console.log(`userpass: ${userPass}, servPass: ${json.password}`)
-                return true;
+                alert("PASSWORD MATCHED");
+                getVenueHandler(venueName);
+                navFunc('/venue-view');
             } else {
-                console.log(`userpass: ${userPass}, servPass: ${json.password}`)
-                return false;
+                alert("INCORRECT PASSWORD");
             }
         } else {
             console.log(json.error)
