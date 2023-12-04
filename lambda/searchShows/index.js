@@ -25,7 +25,7 @@ exports.handler = async (event) => {
 
     let response = undefined;
     try{
-        const result = await searchVenues(event.venueName);
+        const result = await searchVenues(event.showName);
 
         response = {
             statusCode : 200,
