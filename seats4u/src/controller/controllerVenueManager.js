@@ -4,13 +4,48 @@ import { listVenuesHandler } from "../boundary/venues";
 import { getVenueHandler } from "../boundary/venue-view";
 import { refreshHandler } from "../boundary/venue-view";
 
-function createInitialSections() {
+function createInitialSections(venueName, seatsLeft, seatsCenter, seatsRight) {
+
+    console.log(typeof seatsLeft);
+
+    let resource = '/createInitialSections'
+
+    let payload = {
+        "venueName":venueName,
+        "sections": [
+            {
+                "numOfCol":+seatsLeft,
+                "sectionName":"left"
+            },
+            {
+                "numOfCol":+seatsRight,
+                "sectionName":"right"
+            },
+            {
+                "numOfCol":+seatsCenter,
+                "sectionName":"center"
+            }
+        ]
+    }
+
+    const handler = (json) => {
+        if(json.statusCode === 200) {
+            console.log("initial sections created");
+        } else {
+            console.log(`Error creating sections: ${json.error}`);
+        }
+    }
+
+    post(resource, payload, handler);
 
 }
-export function createVenue(venueName, numRows) {
+export function createVenue(venueName, numRows, seatsLeft, seatsCenter, seatsRight) {
 
     let name = venueName;
     let nRows = numRows;
+    let sLeft = seatsLeft;
+    let sCenter = seatsCenter;
+    let sRight = seatsRight; 
 
     let resource = '/createVenue'
 
@@ -27,6 +62,7 @@ export function createVenue(venueName, numRows) {
         if(json.statusCode === 200) {
             document.getElementById("label-password").innerHTML = venuePass
             document.getElementById("api-result").innerHTML = "VENUE CREATED";
+            createInitialSections(venueName, sLeft, sCenter, sRight)
         } else {
             document.getElementById("label-password").innerHTML = "XXXXXXXX"
             document.getElementById("api-result").innerHTML = json.error.sqlMessage;

@@ -6,8 +6,15 @@ function createVenueHandler() {
 
     let venueName = document.getElementById("inp-name").value;
     let numberOfRows = document.getElementById("inp-rows").value;
+    let seatsLeft = document.getElementById("inp-s-left").value;
+    let seatsCenter = document.getElementById("inp-s-center").value;
+    let seatsRight = document.getElementById("inp-s-right").value;
 
-    createVenue(venueName, numberOfRows);
+    if(venueName === "" || typeof +numberOfRows !== 'number' || typeof +seatsLeft !== 'number' || typeof +seatsCenter !== 'number' || typeof +seatsRight !== 'number') {
+        alert("Please fill out all fields!");
+    } else {
+        createVenue(venueName, numberOfRows, seatsLeft, seatsCenter, seatsRight);
+    }
 }
 
 const CreateVenue = () => {
@@ -29,15 +36,15 @@ const CreateVenue = () => {
                 </div>
                 <div id="seatsLeft">
                     <h2>NUMBER OF LEFT SEATS</h2>
-                    <input placeholder="Number of Left Seats"></input>
+                    <input id="inp-s-left" placeholder="Number of Left Seats"></input>
                 </div>
                 <div id="seatsCenter">
                     <h2>NUMBER OF CENTER SEATS</h2>
-                    <input placeholder="Number of Center Seats"></input>
+                    <input id="inp-s-center" placeholder="Number of Center Seats"></input>
                 </div>
                 <div id="seatsRight">
                     <h2>NUMBER OF RIGHT SEATS</h2>
-                    <input placeholder="Number of Right Seats"></input>
+                    <input id="inp-s-right" placeholder="Number of Right Seats"></input>
                 </div>
                 <div id="venuePassword">
                     <h2>VENUE PASSWORD</h2>
