@@ -234,6 +234,10 @@ button:hover {
   margin: 20px;
 }
 
+#label-show-id {
+  color: var(--pale-white);
+}
+
 #venue-view-show-list, #block-div > #block-list, #seats-canvas, #purchase-div {
   background: var(--silver-blue);
 }
@@ -241,27 +245,28 @@ button:hover {
 #venue-view-show-list, #block-div > #block-list {
   display: flex;
   flex-direction: column;
-  align-items: center;
   width: 95%;
   height: 85%;
   border: 1px solid white;
   padding-top: 5px;
+  padding-left: 5px;
 }
 
-#venue-view-show-list > .show {
+#venue-view-show-list > .show-venue-view {
   font-size: 20px;
   margin: 2px;
   text-align: center;
   width: 95%;
   border: 1px solid black;
   background: var(--clay-blue);
+  border: 1px solid white;
 }
 
-#venue-view-show-list > .show:hover {
+#venue-view-show-list > .show-venue-view:hover {
   cursor: pointer;
 }
 
-#venue-view-show-list > .show > #showName {
+#venue-view-show-list > .show-venue-view > #showName {
   color: black;
 }
 
@@ -334,6 +339,10 @@ button:hover {
   justify-content: center;
   align-items: center;
   width: 20%;
+}
+
+.show-venue-view > p {
+  font-size: 12px;
 }
 
 

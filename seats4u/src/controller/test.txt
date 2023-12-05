@@ -1,0 +1,12 @@
+{
+    sDoe;
+    sectionLeft: {
+        numRows:
+        numCols:
+        seats: [
+            {}
+            {}
+            {}
+        ]
+    }
+}

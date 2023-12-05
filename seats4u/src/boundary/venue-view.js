@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { listShows } from '../controller/controllerVenueManager';
+import { post } from '../controller/api';
+import { listShows, activateShow } from '../controller/controllerVenueManager';
+import { deleteShowAdmin } from '../controller/controllerAdmin';
 
 export let currentVenue;
 
@@ -26,6 +28,23 @@ export function refreshHandler() {
 
 }
 
+function deleteHandler() {
+
+    let sID = prompt("What is the ID of the show you want to delete?");
+
+    deleteShowAdmin(sID);
+}
+
+function activateHandler() {
+
+    let sID = prompt("What is the ID of the show you want to activate?");
+
+    activateShow(sID);
+
+}
+
+
+
 const VenueView = () => {
 
     useEffect(() => {
@@ -41,12 +60,13 @@ const VenueView = () => {
         <div id="view-container" className="venue-view">
             <button id="btn-back-create-venue" class="btn-back" onClick={() => {navigate('/venues')}}>BACK</button>
             <h1 id="venue-view-name">WPI</h1>
+            <label id="label-show-id">TEST</label>
             <div id="venue-view-buttons">
-                    <button id="create-show" disabled="true" onClick={() => {navigate('/create-show')}}>CREATE SHOW</button>
-                    <button disabled="true" id="delete-show-btn">DELETE SHOW</button>
-                    <button disabled="true" id="activate-show-btn">ACTIVATE SHOW</button>
-                    <button disabled="true" id="edit-blocks-btn">EDIT BLOCKS</button>
-                    <button disabled="true"id="venue-view-btn-refresh" onClick={() => {refreshHandler()}}>REFRESH</button>
+                    <button id="create-show-btn" onClick={() => {navigate('/create-show')}}>CREATE SHOW</button>
+                    <button id="delete-show-btn" onClick={() => {deleteHandler()}}>DELETE SHOW</button>
+                    <button id="activate-show-btn" onClick={() => {activateHandler()}}>ACTIVATE SHOW</button>
+                    <button id="edit-blocks-btn">EDIT BLOCKS</button>
+                    <button id="venue-view-btn-refresh" onClick={() => {refreshHandler()}}>REFRESH</button>
             </div>
             <div id="venue-view-content">
                 <div id="venue-view-show-div">

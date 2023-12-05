@@ -2,7 +2,11 @@ import { useNavigate } from "react-router-dom";
 import { post, get } from "./api"
 import { listVenuesHandler } from "../boundary/venues";
 import { getVenueHandler } from "../boundary/venue-view";
+import { refreshHandler } from "../boundary/venue-view";
 
+function createInitialSections() {
+
+}
 export function createVenue(venueName, numRows) {
 
     let name = venueName;
@@ -66,6 +70,27 @@ export function createShow(venueName, showName, showDate, showTime, singlePrice)
     }
 
     post(resource, payload, handler);
+}
+
+export function activateShow(showID) {
+
+    let resource = '/activateShow';
+
+    let payload = {"showID":showID}
+
+    const handler = (json) => {
+        if(json.statusCode === 200) {
+            alert("Show activated.");
+            refreshHandler();
+        } else if(json.statusCode === 404) {
+            alert("Show is already active!");
+        } else {
+            alert(`Error: ${json.error}`);
+        }
+    }
+
+    post(resource, payload, handler);
+
 }
 
 export function listVenues() {
@@ -156,17 +181,6 @@ export function listVenues() {
 }
 
 export function listShows(venueName) {
-
-    function depressSelected(depressElement) {
-        let shows = document.getElementById("venue-view-show-list").children;
-
-        for(let i=0; i<shows.length; i++) {
-            shows[i].borderColor = "#ffffff";
-            console.log(shows[i].firstChild.innerText)
-        }
-
-        depressElement.background = "#ffffff";
-    }
     
     let payload = {"venueName":venueName};
 
@@ -175,18 +189,26 @@ export function listShows(venueName) {
             let shows = json.shows
 
             for(let i = 0; i<shows.length; i++) {
+
                 let sName = shows[i].showName;
+
+                let sDateTime = shows[i].showTime;
+                sDateTime = sDateTime.replace('T', " --- ");
+                sDateTime = sDateTime.replace('Z', "");
+                sDateTime = sDateTime.substring(0, 20);
+
+                let sID = shows[i].showID;
                 
-                let show = document.createElement('div'); show.className="show";
+                let show = document.createElement('div'); show.className="show-venue-view";
 
                 show.onclick=(() => {
-                    depressSelected(show)
-                    alert(`Clicked on show: ${show.firstElementChild.innerText}`)
+                    document.getElementById("label-show-id").innerText = `Current Show Name: ${show.lastElementChild.innerText} || Show ID: ${show.firstElementChild.innerText}`
                 });
 
-                let showName = document.createElement('p'); showName.id="showName"; showName.innerText=sName; 
+                let showID = document.createElement('p'); showID.id="showID"; showID.innerText = sID;
+                let showName = document.createElement('p'); showName.id="showName"; showName.innerText=`${sName}\n${sDateTime}`; 
 
-                show.appendChild(showName);
+                show.appendChild(showID); show.appendChild(showName);
 
                 document.getElementById("venue-view-show-list").appendChild(show);
             }
@@ -195,7 +217,9 @@ export function listShows(venueName) {
         }
     }
 
-    post('/listShows', payload, handler); 
+    post('/listShows', payload, handler);
+    
+    document.getElementById("label-show-id").innerText = "NO SHOW SELECTED"
 
 }
 
