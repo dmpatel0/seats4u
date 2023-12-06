@@ -278,6 +278,38 @@ export function deleteVenue(venueName) {
     post(resource, payload, handler)
 }
 
+export function addBlock(blockID, showID, sectionID, blockStartRow, blockEndRow, blockPrice) {
+    
+    let bID = blockID;
+    let sID = showID;
+    let secID = sectionID;
+    let startRow = blockStartRow;
+    let endRow = blockEndRow;
+    let price = blockPrice;
+
+    let resource = '/edit-blocks'
+
+    console.log(bID);
+    console.log(sID);
+    console.log(secID);
+    console.log(startRow);
+    console.log(endRow);
+    console.log(price);
+
+    let payload = {"blockID":bID, "showID":sID, "sectionID":sID, "blockStartRow":startRow, "blockEndRow":endRow, "blockPrice":price}
+
+    const handler = (json) => {
+        document.getElementById("api-result").innerHTML = json.statusCode
+        if(json.statusCode === 200) {
+            // not doin anything rn
+        } else {
+            // not doin anything rn
+        }
+    }
+
+    post(resource, payload, handler);
+}
+
 export function checkPassword(venueName, userPass, navFunc) {
 
     let resource = '/getPassword';

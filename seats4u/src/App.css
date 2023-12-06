@@ -379,3 +379,71 @@ button:hover {
   align-self: center;
   width: 250px;
 }
+
+/* STYLING CODE FOR THE EDIT BLOCKS VIEW */
+.btn-back {
+  position: absolute;
+  top: 30px;
+  left: 40px;
+  width: 50px;
+  height: 20px;
+}
+
+#blocks-view-list-div, #block-div > #block-list, #seats-canvas, #purchase-div {
+  background: var(--silver-blue);
+}
+
+#blocks-view-list-div, #block-div > #block-list {
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  height: 85%;
+  border: 1px solid white;
+  padding-top: 5px;
+  padding-left: 5px;
+}
+
+#blocks-view-list-div > .show-venue-view {
+  font-size: 20px;
+  margin: 2px;
+  text-align: center;
+  width: 95%;
+  border: 1px solid black;
+  background: var(--clay-blue);
+  border: 1px solid white;
+}
+
+#blocks-view-list-div > .show-venue-view:hover {
+  cursor: pointer;
+}
+
+#blocks-view-list-div > .show-venue-view > #showName {
+  color: black;
+}
+
+.add-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-block > .form {
+  display: flex;
+  flex-direction: column;
+  width: 30vw;
+  height: 100vh;
+  padding-top: 7%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.add-block > .form > div {
+  display: flex;
+  justify-content: space-between;
+}
+
+#btn-add-block {
+  margin-top: 20px;
+  align-self: center;
+  width: 250px;
+}

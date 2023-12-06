@@ -16,6 +16,7 @@ function App() {
         <Route path="/create-venue" element={<CreateVenue />} />
         <Route path="/venue-view" element={<VenueView />} />
         <Route path="/create-show" element={<CreateShow />} />
+        <Route path="/edit-blocks" element={<EditBlocks/>} />
       </Routes>
     </BrowserRouter>
   );
