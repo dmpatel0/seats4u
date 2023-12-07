@@ -1,10 +1,21 @@
-import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './boundary/login'
 import Venues from './boundary/venues'
 import CreateVenue from './boundary/create_venue';
 import VenueView from './boundary/venue-view';
 import CreateShow from './boundary/create_show';
+import EditBlocks from './boundary/edit_blocks';
+import { Model } from './model/model'
 import './App.css';
+
+let model = new Model();
+
+export function getModel() {
+  return model;
+}
+
+
+
 
 function App() {
 

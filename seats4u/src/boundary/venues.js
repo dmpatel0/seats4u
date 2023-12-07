@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { deleteVenue, listVenues, checkPassword } from '../controller/controllerVenueManager'
 import { getVenueHandler } from '../boundary/venue-view'
 import { get } from '../controller/api';
+import { getModel } from '../App';
 
 export async function listVenuesHandler() {
 
@@ -23,7 +24,6 @@ export async function listVenuesHandler() {
 
 async function deleteVenueHandler() {
 
-    console.log("delete called")
     let exists = false;
     let venueName = document.getElementById("venue-search-inp").value
     
@@ -36,7 +36,17 @@ async function deleteVenueHandler() {
     }
  
     if(exists) {
-        deleteVenue(venueName)
+
+        if(getModel().isAdmin === false) {
+            let userPass = prompt("What is the venue password?");
+
+            if(userPass !== null) {
+                checkPassword(venueName, userPass, null, "delete");
+            }
+        } else {
+            deleteVenue(venueName);
+        }
+        
     } else {
         alert("VENUE DOES NOT EXIST!");
     }
@@ -57,12 +67,17 @@ async function manageVenueHandler(navigate) {
 
     if(exists) {
 
-        let userPass = prompt("What is the venue password?");
+        if(getModel().isAdmin === false) {
+            let userPass = prompt("What is the venue password?");
 
-        if(userPass !== null) {
-            checkPassword(venue, userPass, navigate)
+            if(userPass !== null) {
+                checkPassword(venue, userPass, navigate, "manage")
+            }
+        } else {
+            getVenueHandler(venue);
+            navigate('/venue-view');
         }
-
+        
     } else {
         alert("VENUE DOES NOT EXIST!");
     }
@@ -77,6 +92,8 @@ const Venues = () => {
 
     const navigate = useNavigate()
 
+    let curModel = getModel(); 
+    console.log(`Venues page: is admin? ${curModel.isAdmin}`);
     // Add checks to the model to determine if user is an admin or not
 
     /* VENUE HTML FORMAT 

@@ -39,6 +39,7 @@ function createInitialSections(venueName, seatsLeft, seatsCenter, seatsRight) {
     post(resource, payload, handler);
 
 }
+
 export function createVenue(venueName, numRows, seatsLeft, seatsCenter, seatsRight) {
 
     let name = venueName;
@@ -239,6 +240,7 @@ export function listShows(venueName) {
 
                 show.onclick=(() => {
                     document.getElementById("label-show-id").innerText = `Current Show Name: ${show.lastElementChild.innerText} || Show ID: ${show.firstElementChild.innerText}`
+                    document.getElementById("label-show-id").title = sID;
                 });
 
                 let showID = document.createElement('p'); showID.id="showID"; showID.innerText = sID;
@@ -310,7 +312,7 @@ export function addBlock(blockID, showID, sectionID, blockStartRow, blockEndRow,
     post(resource, payload, handler);
 }
 
-export function checkPassword(venueName, userPass, navFunc) {
+export function checkPassword(venueName, userPass, navFunc, action) {
 
     let resource = '/getPassword';
 
@@ -320,8 +322,12 @@ export function checkPassword(venueName, userPass, navFunc) {
         if(json.statusCode === 200) {
             if(userPass === json.password) {
                 alert("PASSWORD MATCHED");
-                getVenueHandler(venueName);
-                navFunc('/venue-view');
+                if(action === "manage") {
+                    getVenueHandler(venueName);
+                    navFunc('/venue-view');
+                } else if(action === "delete") {
+                    deleteVenue(venueName);
+                }
             } else {
                 alert("INCORRECT PASSWORD");
             }
@@ -332,4 +338,24 @@ export function checkPassword(venueName, userPass, navFunc) {
 
     post(resource, payload, handler);
 
+}
+
+export function deleteShowVM(showID) {
+
+    let resource = '/deleteShowVM';
+    let payload = {"showID":showID};
+
+    const handler = (json) => {
+        if(json.statusCode === 200) {
+            alert("Show Deleted");
+            refreshHandler();
+        } else if(json.statusCode === 401){
+            alert(`Show is active and can't be deleted!`)
+        } else {
+            alert("Error")
+            console.log(`Error deleting show: ${json.error}`);
+        }
+    }
+
+    post(resource, payload, handler);
 }
