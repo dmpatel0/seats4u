@@ -5,7 +5,7 @@ import { getVenueHandler } from '../boundary/venue-view'
 import { get } from '../controller/api';
 import { getModel } from '../App';
 
-export async function listVenuesHandler() {
+export async function listVenuesHandler(navigate) {
 
     let parent = document.getElementById("venues-data-container");
     let child = parent.lastElementChild;
@@ -18,7 +18,7 @@ export async function listVenuesHandler() {
         child = parent.lastElementChild;
     }
 
-    listVenues();
+    listVenues(navigate);
     
 }
 
@@ -86,11 +86,12 @@ async function manageVenueHandler(navigate) {
 
 const Venues = () => {
 
+    const navigate = useNavigate();
+
     useEffect(() => {
-        listVenuesHandler();
+        listVenuesHandler(navigate);
     }, []);
 
-    const navigate = useNavigate()
 
     let curModel = getModel(); 
     console.log(`Venues page: is admin? ${curModel.isAdmin}`);
@@ -115,7 +116,7 @@ const Venues = () => {
             <h1 id="title">VENUES</h1>
             <div className="main-bar">
                 <button className="main-bar-btn" onClick={() => {navigate('/create-venue')}}>CREATE</button>
-                <button id="btn-refresh" className="main-bar-btn" onClick={() => {listVenuesHandler()}}>REFRESH</button>
+                <button id="btn-refresh" className="main-bar-btn" onClick={() => {listVenuesHandler(navigate)}}>REFRESH</button>
                 <input id="venue-search-inp" placeholder="Search By Full Or Partial Venue Name"></input>
                 <button className="main-bar-btn" onClick={() => {(manageVenueHandler(navigate))}}>MANAGE</button>
                 <button className="main-bar-btn" onClick={() => {deleteVenueHandler()}}>DELETE</button>

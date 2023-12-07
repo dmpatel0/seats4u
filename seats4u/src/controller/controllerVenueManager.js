@@ -164,7 +164,7 @@ export function activateShow(showID) {
 
 }
 
-export function listVenues() {
+export function listVenues(navigate) {
 
     function venueHTML() {
 
@@ -174,6 +174,7 @@ export function listVenues() {
         venueDiv.appendChild(infoDiv);
 
         let venueNameLabel = document.createElement('h3'); venueNameLabel.id="venueNameLabel";
+        venueNameLabel.onclick = (() => {getVenueHandler(venueNameLabel.innerHTML); navigate('/venue-view');})
         infoDiv.appendChild(venueNameLabel);
 
         let showsDiv = document.createElement('div'); showsDiv.className="show-list";

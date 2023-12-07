@@ -79,8 +79,8 @@ export function redrawCanvas(json, canvasObj) {
         console.log(cnv.clientWidth);
         console.log(cnv.clientHeight);
 
-        let seatSize = (cnv.clientWidth / (totalColumns * 4));
-        let offset = seatSize * 0.5;
+        let seatSize = (cnv.clientWidth / ((totalColumns+4)+ 2*(totalColumns+4)));
+        let offset = 5;
 
         for (let r = 0; r < totalRows; r++) {
             for (let c = currentCol; c < currentCol+sectionCol; c++) {
@@ -88,7 +88,7 @@ export function redrawCanvas(json, canvasObj) {
                 //let seat = new Seat(r, c, json.)
                 // HERE is where you draw everything about this cell that you know about...
                 ctx.beginPath()
-                ctx.rect((seatSize*c)+offset, (seatSize*r)+offset, seatSize, seatSize);
+                ctx.rect((seatSize*c)+offset, (seatSize*r)+offset, seatSize-offset, seatSize-offset);
 
                 let index = (r * totalColumns) + c
 
