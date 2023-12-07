@@ -13,7 +13,7 @@ export function getVenueHandler(venue) {
     currentVenue = venue;
 }
 
-export function refreshHandler(canvasObj) {
+export function refreshHandler() {
 
     let parent = document.getElementById("venue-view-show-list");
     console.log(parent)
@@ -30,8 +30,15 @@ export function refreshHandler(canvasObj) {
     let showID = document.getElementById("label-show-id").title.value
 
     listShows(currentVenue);
-    getSeats(showID, canvasObj);
 
+}
+
+function refreshCanvas(canvasObj) {
+
+    let showID = document.getElementById("label-show-id").title;
+    console.log(showID);
+
+    getSeats(showID, canvasObj);
 }
 
 export function redrawCanvas(json, canvasObj) {
@@ -45,20 +52,25 @@ export function redrawCanvas(json, canvasObj) {
     let totalColumns = json.seats.left.columns + json.seats.center.columns + json.seats.right.columns;
 
     let currentCol = 0;
+    let sectionCol;
+
 
     for(let i = 0; i < 3; i++) {
 
-        let sectionCol;
-        
         switch(i) {
             case 0:
                 sectionCol = json.seats.left.columns;
+                console.log(sectionCol);
                 break;
             case 1:
                 sectionCol = json.seats.center.columns;
+                console.log(sectionCol);
+
                 break;
             case 2:
                 sectionCol = json.seats.right.columns;
+                console.log(sectionCol);
+
                 break;
             default:
                 break;
@@ -67,37 +79,54 @@ export function redrawCanvas(json, canvasObj) {
         console.log(cnv.clientWidth);
         console.log(cnv.clientHeight);
 
-        let seatSize = (cnv.clientWidth / (totalColumns * 10));
+        let seatSize = (cnv.clientWidth / (totalColumns * 4));
         let offset = seatSize * 0.5;
 
         for (let r = 0; r < totalRows; r++) {
             for (let c = currentCol; c < currentCol+sectionCol; c++) {
 
                 //let seat = new Seat(r, c, json.)
-
                 // HERE is where you draw everything about this cell that you know about...
                 ctx.beginPath()
                 ctx.rect((seatSize*c)+offset, (seatSize*r)+offset, seatSize, seatSize);
-                ctx.fillStyle = "white";
-                if((r%2 === 0) || (c%2 === 0)) {
-                    ctx.fillStyle = "red"
+
+                let index = (r * totalColumns) + c
+
+                switch(i) {
+                    
+                    case 0:
+                        if(json.seats.seats[index].isPurchased === 1) {
+                            ctx.fillStyle = "red";
+                        } else {
+                            ctx.fillStyle = "white";
+                        }
+                        break;
+                    case 1:
+                        if(json.seats.seats[index].isPurchased === 1) {
+                            ctx.fillStyle = "red";
+                        } else {
+                            ctx.fillStyle = "white";
+                        }
+                        break;
+                    case 2:
+                        if(json.seats.seats[index].isPurchased === 1) {
+                            ctx.fillStyle = "red";
+                        } else {
+                            ctx.fillStyle = "white";
+                        }
+                        break;
+                    default:
+                        break;
                 }
                 ctx.fill()
                 ctx.stroke()
             }
+
+            console.log(`end DRAW row: ${r}`);
+
         }
 
-        currentCol = currentCol + sectionCol;
-
-        for(let j = 0; j < 5; j++) {
-
-            ctx.beginPath()
-            ctx.rect((seatSize*currentCol)+offset, (seatSize*j)+offset, seatSize, seatSize);
-            ctx.fillStyle = "transparent"
-            ctx.fill()
-            //ctx.stroke()
-        }
-        currentCol += 1; 
+        currentCol = currentCol + sectionCol; 
 
     }
     
@@ -147,7 +176,8 @@ const VenueView = () => {
                     <button id="delete-show-btn" onClick={() => {deleteHandler()}}>DELETE SHOW</button>
                     <button id="activate-show-btn" onClick={() => {activateHandler()}}>ACTIVATE SHOW</button>
                     <button id="edit-blocks-btn" onClick={() => {navigate('/edit-blocks')}}>EDIT BLOCKS</button>
-                    <button id="venue-view-btn-refresh" onClick={() => {refreshHandler(canvasRef.current)}}>REFRESH</button>
+                    <button id="refresh-canvas-btn" onClick={() => {refreshCanvas(canvasRef.current)}}>LOAD SEATS</button>
+                    <button id="venue-view-btn-refresh" onClick={() => {refreshHandler()}}>REFRESH</button>
             </div>
             <div id="venue-view-content">
                 <div id="venue-view-show-div">

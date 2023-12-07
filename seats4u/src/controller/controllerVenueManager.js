@@ -73,6 +73,45 @@ export function createVenue(venueName, numRows, seatsLeft, seatsCenter, seatsRig
     post(resource, payload, handler);
 }
 
+function createInitialBlock(venueName, showName, showDate, showTime) {
+
+    let showDateTime = `${showDate} ${showTime}`;
+    
+    let resource = '/createInitialBlocks';
+
+    let payload = {"venueName":venueName, "showName":showName, "showTime":showDateTime};
+
+    const handler = (json) => {
+        if(json.statusCode === 200) {
+            console.log(`Inital blocks for ${showName} created...`)
+            createInitialSeats(venueName, showName, showDateTime);
+        } else {
+            console.log(`Error: ${json.error}`);
+        }
+    }
+
+    post(resource, payload, handler);
+
+}
+
+function createInitialSeats(venueName, showName, showDateTime) {
+
+    let resource = '/createInitialSeats'
+
+    let payload = {"venueName":venueName, "showName":showName, "showTime":showDateTime};
+
+    const handler = (json) => {
+        if(json.statusCode === 200) {
+            console.log(`Initial seats for ${showName} created...`);
+        } else {
+            console.log(`Error: ${json.error}`);
+        }
+    }
+
+    post(resource, payload, handler);
+
+}
+
 export function createShow(venueName, showName, showDate, showTime, singlePrice) {
     
     let vName = venueName;
@@ -94,15 +133,10 @@ export function createShow(venueName, showName, showDate, showTime, singlePrice)
     const handler = (json) => {
         document.getElementById("api-result").innerHTML = json.statusCode
         if(json.statusCode === 200) {
-            /* REPLACE
-            document.getElementById("label-password").innerHTML = venuePass
-            document.getElementById("api-result").innerHTML = "VENUE CREATED";
-            */
+            console.log(`Show ${showName} created...`)
+           createInitialBlock(venueName, showName, showDate, showTime);
         } else {
-            /* REPLACE
-            document.getElementById("label-password").innerHTML = "XXXXXXXX"
-            document.getElementById("api-result").innerHTML = json.error.sqlMessage;
-            */
+            console.log(`Error creating show: ${json.error}`);
         }
     }
 

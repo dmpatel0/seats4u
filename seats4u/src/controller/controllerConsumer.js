@@ -11,7 +11,7 @@ export function getSeats(showID, canvasObj) {
         if(json.statusCode === 200) {
             redrawCanvas(json, canvasObj);
         } else {
-            console.log(`getSeats Error: ${json.error}`);
+            console.log(`getSeats Error: ${json.statusCode}`);
         }
     } 
 
