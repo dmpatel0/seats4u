@@ -93,21 +93,34 @@ export function redrawCanvas(json, canvasObj) {
                         if(json.seats.seats[index].isPurchased === 1) {
                             ctx.fillStyle = "red";
                         } else {
-                            ctx.fillStyle = "white";
+                            if(i % 2 === 0) {
+                                ctx.fillStyle = "white"
+                            } else {
+                                ctx.fillStyle = "silver";
+                            }
                         }
+                        ctx.strokeStyle = "fuschsia"
                         break;
                     case 1:
                         if(json.seats.seats[index].isPurchased === 1) {
                             ctx.fillStyle = "red";
                         } else {
-                            ctx.fillStyle = "white";
+                            if(i % 2 === 0) {
+                                ctx.fillStyle = "white"
+                            } else {
+                                ctx.fillStyle = "silver";
+                            }
                         }
                         break;
                     case 2:
                         if(json.seats.seats[index].isPurchased === 1) {
                             ctx.fillStyle = "red";
                         } else {
-                            ctx.fillStyle = "white";
+                            if(i % 2 === 0) {
+                                ctx.fillStyle = "white"
+                            } else {
+                                ctx.fillStyle = "silver";
+                            }
                         }
                         break;
                     default:
@@ -117,7 +130,7 @@ export function redrawCanvas(json, canvasObj) {
                 ctx.stroke()
             }
 
-            console.log(`end DRAW row: ${r}`);
+            //console.log(`end DRAW row: ${r}`);
 
         }
 

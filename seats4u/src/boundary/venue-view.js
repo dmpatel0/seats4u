@@ -109,21 +109,33 @@ export function redrawCanvas(json, canvasObj) {
                         if(json.seats.seats[index].isPurchased === 1) {
                             ctx.fillStyle = "red";
                         } else {
-                            ctx.fillStyle = "white";
+                            if(i % 2 === 0) {
+                                ctx.fillStyle = "white"
+                            } else {
+                                ctx.fillStyle = "silver";
+                            }
                         }
                         break;
                     case 1:
                         if(json.seats.seats[index].isPurchased === 1) {
                             ctx.fillStyle = "red";
                         } else {
-                            ctx.fillStyle = "white";
+                            if(i % 2 === 0) {
+                                ctx.fillStyle = "white"
+                            } else {
+                                ctx.fillStyle = "silver";
+                            }
                         }
                         break;
                     case 2:
                         if(json.seats.seats[index].isPurchased === 1) {
                             ctx.fillStyle = "red";
                         } else {
-                            ctx.fillStyle = "white";
+                            if(i % 2 === 0) {
+                                ctx.fillStyle = "white"
+                            } else {
+                                ctx.fillStyle = "silver";
+                            }
                         }
                         break;
                     default:
