@@ -449,13 +449,61 @@ button:hover {
 }
 
 /* STYLING CODE FOR THE SHOW REPORT VIEW */
-.columns-container {
-  display: flex;
-  justify-content: space-around;
-  padding: 20px;
+#show-report-container {
+  background: var(--silver-blue);
+  border: 2px solid black;
+  height: 100vh;
+  width: 70vw;
+  overflow-y: auto;
 }
 
-.column {
-  flex: 1;
+.venue {
+  display: flex;
+  flex-direction: row;   
+  justify-content: center; 
+  border: 1px solid white;
+  height: 150px;
+  margin: 5px 0px 5px 0px;
+}
+
+.venue > .info-container > h3 {
+  background: rgb(50, 50, 50);
+  width: 100%;
   text-align: center;
+  border: 1px solid black;
+  color: var(--pale-white);
+}
+
+.venue > .info-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+}
+
+.info-container > h3 {
+  margin: 5px;
+}
+
+.venue > .info-container > .show-list {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  overflow-y: auto;
+  background: var(--clay-blue);
+  border: 3px solid black;
+}
+
+.venue > .info-container > .show-list > .show {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  border: 1px solid black;
+  background: var(--silver-blue);
+}
+
+.show > p {
+ margin: 2px;
+ color: var(--pale-white);
+ text-decoration: solid;
 }
