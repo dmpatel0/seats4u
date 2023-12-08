@@ -447,3 +447,15 @@ button:hover {
   align-self: center;
   width: 250px;
 }
+
+/* STYLING CODE FOR THE SHOW REPORT VIEW */
+.columns-container {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.column {
+  flex: 1;
+  text-align: center;
+}
