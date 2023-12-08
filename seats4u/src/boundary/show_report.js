@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react'
-import { generateShowReport } from './venue-view'
+import { generateShowReport } from '../controller/controllerVenueManager'
 import { useNavigate } from 'react-router-dom';
+import { currentVenue } from '.venue-view';
 
 const ShowReport = () => {
+    
     useEffect(() => {
-        generateShowReport()
+        generateShowReport(currentVenue)
     }, []);
 
     const navigate = useNavigate()

@@ -7,6 +7,7 @@ import CreateShow from './boundary/create_show';
 import EditBlocks from './boundary/edit_blocks';
 import { Model } from './model/model'
 import './App.css';
+import ShowReport from './boundary/show_report';
 
 let model = new Model();
 
@@ -28,6 +29,7 @@ function App() {
         <Route path="/venue-view" element={<VenueView />} />
         <Route path="/create-show" element={<CreateShow />} />
         <Route path="/edit-blocks" element={<EditBlocks/>} />
+        <Route path="/show-report" element={<ShowReport />} />
       </Routes>
     </BrowserRouter>
   );

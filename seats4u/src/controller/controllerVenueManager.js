@@ -164,7 +164,7 @@ export function activateShow(showID) {
 
 }
 
-export function generateShowReport() {
+export function generateShowReport(currentVenue) {
 
     function reportHTML() {
 
