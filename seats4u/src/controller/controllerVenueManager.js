@@ -3,6 +3,9 @@ import { post, get } from "./api"
 import { listVenuesHandler } from "../boundary/venues";
 import { getVenueHandler } from "../boundary/venue-view";
 import { refreshHandler } from "../boundary/venue-view";
+import { getModel } from "../App";
+import { listSelectedSeats } from "./controllerConsumer";
+import { getVenueHandlerConsumer } from "../boundary/venue-view-consumer";
 
 function createInitialSections(venueName, seatsLeft, seatsCenter, seatsRight) {
 
@@ -109,7 +112,6 @@ function createInitialSeats(venueName, showName, showDateTime) {
     }
 
     post(resource, payload, handler);
-
 }
 
 export function createShow(venueName, showName, showDate, showTime, singlePrice) {
@@ -164,60 +166,6 @@ export function activateShow(showID) {
 
 }
 
-export function generateShowReport(currentVenue) {
-
-    function reportHTML() {
-
-        let venueDiv = document.createElement('div'); venueDiv.className="venue";
-
-        let infoDiv = document.createElement('div'); infoDiv.className="info-container";
-        venueDiv.appendChild(infoDiv);
-
-        let venueNameLabel = document.createElement('h3'); venueNameLabel.id="venueNameLabel";
-        infoDiv.appendChild(venueNameLabel);
-
-        let showsDiv = document.createElement('div'); showsDiv.className="show-list";
-        infoDiv.appendChild(showsDiv);
-
-        return venueDiv;
-    }
-
-    const handler = (json) => {
-        if(json.statusCode === 200){
-            // success
-        }
-    }
-
-    post('/showReportVenueManager', currentVenue, handler)
-    .then(function (response) {
-        if(response.statusCode === 200) {
-            let venueContainer = document.getElementById("show-report-container");
-            let report = response.report;
-
-            let reportDiv = reportHTML();
-
-            for(let i=0; i<report[i].length; i++) { 
-                let sName = report[i].showName;
-                let sTicketsPurchased = report[i].ticketsPurchased;
-                let sTicketsRemaining = report[i].ticketsRemaining;
-                let sProfit = report[i].totalProfit;
-
-                let show = document.createElement('div'); show.className="show";
-                let showName = document.createElement('p'); showName.id="showName"; showName.innerText = sName;
-                let showTPurchased = document.createElement('p'); showTPurchased.id="showTPurchased"; showTPurchased.innerText = sTicketsPurchased;
-                let showTRemaining = document.createElement('p'); showTRemaining.id="showTRemaining"; showTRemaining.innerText = sTicketsRemaining;
-                let showProfit = document.createElement('p'); showProfit.id="showProfit"; showProfit.innerText = sProfit;
-                
-                show.appendChild(showName); show.appendChild(showTPurchased); show.appendChild(showTRemaining); show.appendChild(showProfit);
-
-                reportDiv.firstChild.lastChild.appendChild(show)
-            }
-            
-            venueContainer.appendChild(venueDiv);
-        }
-    })
-}
-
 export function listVenues(navigate) {
 
     function venueHTML() {
@@ -228,7 +176,7 @@ export function listVenues(navigate) {
         venueDiv.appendChild(infoDiv);
 
         let venueNameLabel = document.createElement('h3'); venueNameLabel.id="venueNameLabel";
-        venueNameLabel.onclick = (() => {getVenueHandler(venueNameLabel.innerHTML); navigate('/venue-view');})
+        venueNameLabel.onclick = (() => {getVenueHandlerConsumer(venueNameLabel.innerHTML); navigate('/venue-view-consumer');})
         infoDiv.appendChild(venueNameLabel);
 
         let showsDiv = document.createElement('div'); showsDiv.className="show-list";
@@ -330,6 +278,9 @@ export function listShows(venueName) {
                 show.onclick=(() => {
                     document.getElementById("label-show-id").innerText = `Current Show Name: ${show.lastElementChild.innerText} || Show ID: ${show.firstElementChild.innerText}`
                     document.getElementById("label-show-id").title = sID;
+                    getModel().selectedSeats.clear();
+                    getModel().totalPrice = 0;
+                    listSelectedSeats();
                 });
 
                 let showID = document.createElement('p'); showID.id="showID"; showID.innerText = sID;

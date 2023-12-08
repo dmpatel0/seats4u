@@ -1,12 +1,181 @@
-{
-    sDoe;
-    sectionLeft: {
-        numRows:
-        numCols:
-        seats: [
-            {}
-            {}
-            {}
-        ]
+export function generateShowReport(currentVenue) {
+
+    function reportHTML() {
+
+        let venueDiv = document.createElement('div'); venueDiv.className="venue";
+
+        let infoDiv = document.createElement('div'); infoDiv.className="info-container";
+        venueDiv.appendChild(infoDiv);
+
+        let venueNameLabel = document.createElement('h3'); venueNameLabel.id="venueNameLabel";
+        infoDiv.appendChild(venueNameLabel);
+
+        let showsDiv = document.createElement('div'); showsDiv.className="show-list";
+        infoDiv.appendChild(showsDiv);
+
+        return venueDiv;
     }
+
+    const handler = (json) => {
+        if(json.statusCode === 200){
+            // success
+        }
+    }
+
+    post('/showReportVenueManager', currentVenue, handler)
+    .then(function (response) {
+        if(response.statusCode === 200) {
+            let venueContainer = document.getElementById("show-report-container");
+            let report = response.report;
+
+            let reportDiv = reportHTML();
+
+            for(let i=0; i<report[i].length; i++) { 
+                let sName = report[i].showName;
+                let sTicketsPurchased = report[i].ticketsPurchased;
+                let sTicketsRemaining = report[i].ticketsRemaining;
+                let sProfit = report[i].totalProfit;
+
+                let show = document.createElement('div'); show.className="show";
+                let showName = document.createElement('p'); showName.id="showName"; showName.innerText = sName;
+                let showTPurchased = document.createElement('p'); showTPurchased.id="showTPurchased"; showTPurchased.innerText = sTicketsPurchased;
+                let showTRemaining = document.createElement('p'); showTRemaining.id="showTRemaining"; showTRemaining.innerText = sTicketsRemaining;
+                let showProfit = document.createElement('p'); showProfit.id="showProfit"; showProfit.innerText = sProfit;
+                
+                show.appendChild(showName); show.appendChild(showTPurchased); show.appendChild(showTRemaining); show.appendChild(showProfit);
+
+                reportDiv.firstChild.lastChild.appendChild(show)
+            }
+            
+            venueContainer.appendChild(venueDiv);
+        }
+    })
+}
+
+/* STYLING CODE FOR THE EDIT BLOCKS VIEW */
+.btn-back {
+  position: absolute;
+  top: 30px;
+  left: 40px;
+  width: 50px;
+  height: 20px;
+}
+
+#blocks-view-list-div, #block-div > #block-list, #seats-canvas, #purchase-div {
+  background: var(--silver-blue);
+}
+
+#blocks-view-list-div, #block-div > #block-list {
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  height: 85%;
+  border: 1px solid white;
+  padding-top: 5px;
+  padding-left: 5px;
+}
+
+#blocks-view-list-div > .show-venue-view {
+  font-size: 20px;
+  margin: 2px;
+  text-align: center;
+  width: 95%;
+  border: 1px solid black;
+  background: var(--clay-blue);
+  border: 1px solid white;
+}
+
+#blocks-view-list-div > .show-venue-view:hover {
+  cursor: pointer;
+}
+
+#blocks-view-list-div > .show-venue-view > #showName {
+  color: black;
+}
+
+.add-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-block > .form {
+  display: flex;
+  flex-direction: column;
+  width: 30vw;
+  height: 100vh;
+  padding-top: 7%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.add-block > .form > div {
+  display: flex;
+  justify-content: space-between;
+}
+
+#btn-add-block {
+  margin-top: 20px;
+  align-self: center;
+  width: 250px;
+}
+
+/* STYLING CODE FOR THE SHOW REPORT VIEW */
+#show-report-container {
+  background: var(--silver-blue);
+  border: 2px solid black;
+  height: 100vh;
+  width: 70vw;
+  overflow-y: auto;
+}
+
+.venue {
+  display: flex;
+  flex-direction: row;   
+  justify-content: center; 
+  border: 1px solid white;
+  height: 150px;
+  margin: 5px 0px 5px 0px;
+}
+
+.venue > .info-container > h3 {
+  background: rgb(50, 50, 50);
+  width: 100%;
+  text-align: center;
+  border: 1px solid black;
+  color: var(--pale-white);
+}
+
+.venue > .info-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+}
+
+.info-container > h3 {
+  margin: 5px;
+}
+
+.venue > .info-container > .show-list {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  overflow-y: auto;
+  background: var(--clay-blue);
+  border: 3px solid black;
+}
+
+.venue > .info-container > .show-list > .show {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  border: 1px solid black;
+  background: var(--silver-blue);
+}
+
+.show > p {
+ margin: 2px;
+ color: var(--pale-white);
+ text-decoration: solid;
 }
