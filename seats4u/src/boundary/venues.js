@@ -84,6 +84,49 @@ async function manageVenueHandler(navigate) {
     
 }
 
+function searchHandler(action) {
+
+    let query = document.getElementById("venue-search-inp").value
+
+    let foundVenues = []
+
+    if(action === "venue") {
+        let allVenues = document.getElementById("venues-data-container").children
+        for(let i=0; i<allVenues.length; i++) {
+            if(allVenues[i].title.includes(query)) {
+                foundVenues.push(allVenues[i])
+            }
+        }
+    } else if(action === "show") {
+        let allVenues = document.getElementById("venues-data-container").children
+        for(let i=0; i<allVenues.length; i++) {
+            let allShows = allVenues[i].lastChild.lastChild.childNodes
+            console.log(allShows)
+            for(let j=0; j<allShows.length; j++) {
+                //console.log(`Show: ${allShows[j].firstElementChild.innerText}`)
+                if(allShows[j].firstElementChild.innerText.includes(query)) {
+                    foundVenues.push(allVenues[i])
+                }
+            }
+        }
+    }
+    
+
+    // REMOVE ALL CURRENT VENUES
+    let parent = document.getElementById("venues-data-container");
+    let child = parent.lastElementChild;
+
+    while(child) {
+        parent.removeChild(child);
+        child = parent.lastElementChild;
+    }
+
+    for(let i=0; i<foundVenues.length; i++) {
+        parent.appendChild(foundVenues[i])
+    }
+
+}
+
 const Venues = () => {
 
     const navigate = useNavigate();
@@ -113,11 +156,14 @@ const Venues = () => {
 
     return (
         <div className="venues">
+            <button id="btn-logout" class="btn-logout" onClick={() => {getModel().isAdmin = false; navigate('/')}}>LOGOUT</button>
             <h1 id="title">VENUES</h1>
             <div className="main-bar">
                 <button className="main-bar-btn" onClick={() => {navigate('/create-venue')}}>CREATE</button>
                 <button id="btn-refresh" className="main-bar-btn" onClick={() => {listVenuesHandler(navigate)}}>REFRESH</button>
+                <button className="main-bar-btn" onClick={() => {searchHandler("show")}}>FIND SHOW</button>
                 <input id="venue-search-inp" placeholder="Search By Full Or Partial Venue Name"></input>
+                <button className="main-bar-btn" onClick={() => {searchHandler("venue")}}>FIND VENUE</button>
                 <button className="main-bar-btn" onClick={() => {(manageVenueHandler(navigate))}}>MANAGE</button>
                 <button className="main-bar-btn" onClick={() => {deleteVenueHandler()}}>DELETE</button>
             </div>

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { generateShowReport } from '../controller/controllerVenueManager'
 import { useNavigate } from 'react-router-dom';
-import { currentVenue } from '.venue-view';
+import { currentVenue } from '../boundary/venue-view';
 
 const ShowReport = () => {
     

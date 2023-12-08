@@ -4,6 +4,8 @@ export class Model {
 
         this.isAdmin = false;
         this.selectedSeats = new Map()
+        this.totalPrice = 0;
+
 
     }
 
@@ -11,28 +13,31 @@ export class Model {
         this.isAdmin = true;
     }
 
-    selectSeat(row, col) {
+    selectSeat(row, col, price) {
 
-        let seat = new Seat(row, col)
+        let seatPos = `${row},${col}`
 
-        let seatPos = `${seat.row},${seat.col}`
+        this.selectedSeats.set(seatPos, price);
+        this.totalPrice += price;
 
-        this.selectedSeats.set(seatPos, seat);
     }
 
     deselectSeat(row, col) {
 
-        let seatPos = `${row},${col}`
-        
+        let seatPos = `${row},${col}`;
+        let seatPrice = this.selectedSeats.get(seatPos);
+
         this.selectedSeats.delete(seatPos);
+        this.totalPrice -= seatPrice;
     }
 }
 
 export class Seat {
 
-    constructor(row, col, isPurchased) {
+    constructor(row, col, price) {
         this.row = row;
         this.col = col;
+        this.price = price
         this.isPurchased = false;
     }
 

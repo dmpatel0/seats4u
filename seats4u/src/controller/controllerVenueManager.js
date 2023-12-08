@@ -399,3 +399,57 @@ export function deleteShowVM(showID) {
 
     post(resource, payload, handler);
 }
+
+export function generateShowReport(currentVenue) {
+
+    function reportHTML() {
+
+        let venueDiv = document.createElement('div'); venueDiv.className="venue";
+
+        let infoDiv = document.createElement('div'); infoDiv.className="info-container";
+        venueDiv.appendChild(infoDiv);
+
+        let venueNameLabel = document.createElement('h3'); venueNameLabel.id="venueNameLabel";
+        infoDiv.appendChild(venueNameLabel);
+
+        let showsDiv = document.createElement('div'); showsDiv.className="show-list";
+        infoDiv.appendChild(showsDiv);
+
+        return venueDiv;
+    }
+
+    const handler = (json) => {
+        if(json.statusCode === 200){
+            // success
+        }
+    }
+
+    post('/showReportVenueManager', currentVenue, handler)
+    .then(function (response) {
+        if(response.statusCode === 200) {
+            let venueContainer = document.getElementById("show-report-container");
+            let report = response.report;
+
+            let reportDiv = reportHTML();
+
+            for(let i=0; i<report[i].length; i++) { 
+                let sName = report[i].showName;
+                let sTicketsPurchased = report[i].ticketsPurchased;
+                let sTicketsRemaining = report[i].ticketsRemaining;
+                let sProfit = report[i].totalProfit;
+
+                let show = document.createElement('div'); show.className="show";
+                let showName = document.createElement('p'); showName.id="showName"; showName.innerText = sName;
+                let showTPurchased = document.createElement('p'); showTPurchased.id="showTPurchased"; showTPurchased.innerText = sTicketsPurchased;
+                let showTRemaining = document.createElement('p'); showTRemaining.id="showTRemaining"; showTRemaining.innerText = sTicketsRemaining;
+                let showProfit = document.createElement('p'); showProfit.id="showProfit"; showProfit.innerText = sProfit;
+                
+                show.appendChild(showName); show.appendChild(showTPurchased); show.appendChild(showTRemaining); show.appendChild(showProfit);
+
+                reportDiv.firstChild.lastChild.appendChild(show)
+            }
+            
+            venueContainer.appendChild(reportDiv);
+        }
+    })
+}
