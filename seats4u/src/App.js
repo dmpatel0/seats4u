@@ -31,6 +31,7 @@ function App() {
         <Route path="/venue-view-consumer" element={<VenueViewConsumer />} />
         <Route path="/create-show" element={<CreateShow />} />
         <Route path="/edit-blocks" element={<EditBlocks/>} />
+        <Route path="/show-report" element={<ShowReport />} />
       </Routes>
     </BrowserRouter>
   );

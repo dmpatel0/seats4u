@@ -241,7 +241,7 @@ export function listVenues(navigate) {
                     }
                 }
                 
-                post('/listShows', payload, handler)
+                post('/listActiveShows', payload, handler)
 
                 venueContainer.appendChild(venueDiv);
             }
@@ -251,6 +251,53 @@ export function listVenues(navigate) {
         let refresh_btn = document.getElementById("btn-refresh")
         refresh_btn.disabled = false;
     })
+
+}
+
+export function listActiveShows(venueName) {
+    
+    let payload = {"venueName":venueName};
+
+    const handler = (json) => {
+        if(json.statusCode === 200) {
+            let shows = json.shows
+
+            for(let i = 0; i<shows.length; i++) {
+
+                let sName = shows[i].showName;
+
+                let sDateTime = shows[i].showTime;
+                sDateTime = sDateTime.replace('T', " --- ");
+                sDateTime = sDateTime.replace('Z', "");
+                sDateTime = sDateTime.substring(0, 20);
+
+                let sID = shows[i].showID;
+                
+                let show = document.createElement('div'); show.className="show-venue-view";
+
+                show.onclick=(() => {
+                    document.getElementById("label-show-id").innerText = `Current Show Name: ${show.lastElementChild.innerText} || Show ID: ${show.firstElementChild.innerText}`
+                    document.getElementById("label-show-id").title = sID;
+                    getModel().selectedSeats.clear();
+                    getModel().totalPrice = 0;
+                    listSelectedSeats();
+                });
+
+                let showID = document.createElement('p'); showID.id="showID"; showID.innerText = sID;
+                let showName = document.createElement('p'); showName.id="showName"; showName.innerText=`${sName}\n${sDateTime}`; 
+
+                show.appendChild(showID); show.appendChild(showName);
+
+                document.getElementById("venue-view-show-list").appendChild(show);
+            }
+            
+            document.getElementById("venue-view-btn-refresh").disabled = false;
+        }
+    }
+
+    post('/listActiveShows', payload, handler);
+    
+    document.getElementById("label-show-id").innerText = "NO SHOW SELECTED"
 
 }
 
@@ -402,54 +449,65 @@ export function deleteShowVM(showID) {
 
 export function generateShowReport(currentVenue) {
 
-    function reportHTML() {
+    function reportHTML(currentVenue) {
 
-        let venueDiv = document.createElement('div'); venueDiv.className="venue";
+        let venueDiv = document.createElement('div'); venueDiv.className="venue-sr";
 
-        let infoDiv = document.createElement('div'); infoDiv.className="info-container";
-        venueDiv.appendChild(infoDiv);
-
-        let venueNameLabel = document.createElement('h3'); venueNameLabel.id="venueNameLabel";
+        let infoDiv = document.createElement('div'); infoDiv.className="info-container-sr";
+        
+        let venueNameLabel = document.createElement('h3'); venueNameLabel.id="venueNameLabel"; venueNameLabel.innerHTML = currentVenue;
         infoDiv.appendChild(venueNameLabel);
 
-        let showsDiv = document.createElement('div'); showsDiv.className="show-list";
+        let showsDiv = document.createElement('div'); showsDiv.className="show-list-sr";
         infoDiv.appendChild(showsDiv);
+
+        venueDiv.appendChild(infoDiv);
 
         return venueDiv;
     }
 
+    let payload = {"venueName":currentVenue};
+
     const handler = (json) => {
         if(json.statusCode === 200){
-            // success
-        }
-    }
 
-    post('/showReportVenueManager', currentVenue, handler)
-    .then(function (response) {
-        if(response.statusCode === 200) {
             let venueContainer = document.getElementById("show-report-container");
-            let report = response.report;
+            let report = json.report;
 
-            let reportDiv = reportHTML();
+            let reportDiv = reportHTML(currentVenue);
 
-            for(let i=0; i<report[i].length; i++) { 
-                let sName = report[i].showName;
-                let sTicketsPurchased = report[i].ticketsPurchased;
-                let sTicketsRemaining = report[i].ticketsRemaining;
-                let sProfit = report[i].totalProfit;
+            for(let i=0; i<report.length; i++) { 
+                let sID = report[i].showID; console.log(sID);
+                let sName = report[i].showName; console.log(sName);
+                let sTime = report[i].showTime; console.log(sTime);
+                let sActive = report[i].isActive; console.log(sActive);
+                let sTicketsPurchased = report[i].ticketsPurchased; console.log(sTicketsPurchased);
+                let sTicketsRemaining = report[i].ticketsRemaining; console.log(sTicketsRemaining);
+                let sProfit = report[i].totalProfit; console.log(sProfit);
 
-                let show = document.createElement('div'); show.className="show";
-                let showName = document.createElement('p'); showName.id="showName"; showName.innerText = sName;
-                let showTPurchased = document.createElement('p'); showTPurchased.id="showTPurchased"; showTPurchased.innerText = sTicketsPurchased;
-                let showTRemaining = document.createElement('p'); showTRemaining.id="showTRemaining"; showTRemaining.innerText = sTicketsRemaining;
-                let showProfit = document.createElement('p'); showProfit.id="showProfit"; showProfit.innerText = sProfit;
+                let show = document.createElement('div'); show.className="show-sr";
+                let showID = document.createElement('p'); showID.id="showID"; showID.innerText = `Show ID: ${sID}\n`
+                let showName = document.createElement('p'); showName.id="showName"; showName.innerText = `Show Name: ${sName}\n`;
+                let showTime = document.createElement('p'); showTime.id="showTime"; showTime.innerText = `Show Time: ${sTime}\n`;
+                let showIsActive = document.createElement('p'); showIsActive.id="showIsActive"; showIsActive.innerText = `Active? ${sActive}\n`;
+                let showTPurchased = document.createElement('p'); showTPurchased.id="showTPurchased"; showTPurchased.innerText = `Tickets Purchased: ${sTicketsPurchased}\n`;
+                let showTRemaining = document.createElement('p'); showTRemaining.id="showTRemaining"; showTRemaining.innerText = `Tickets Remaining: ${sTicketsRemaining}\n`;
+                let showProfit = document.createElement('p'); showProfit.id="showProfit"; showProfit.innerText = `Total Profit: ${sProfit}`;
                 
-                show.appendChild(showName); show.appendChild(showTPurchased); show.appendChild(showTRemaining); show.appendChild(showProfit);
+                show.appendChild(showID);
+                show.appendChild(showName);
+                show.appendChild(showTime);
+                show.appendChild(showIsActive);
+                show.appendChild(showTPurchased); 
+                show.appendChild(showTRemaining); 
+                show.appendChild(showProfit);
 
                 reportDiv.firstChild.lastChild.appendChild(show)
             }
             
             venueContainer.appendChild(reportDiv);
         }
-    })
+    }
+
+    post('/showReportVM', payload, handler)
 }

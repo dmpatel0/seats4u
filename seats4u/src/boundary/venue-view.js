@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { listShows, activateShow, deleteShowVM } from '../controller/controllerVenueManager';
+import { listShows, activateShow, deleteShowVM, generateShowReport } from '../controller/controllerVenueManager';
 import { deleteShowAdmin } from '../controller/controllerAdmin';
 import { getModel } from '../App';
 import { getSeats, selectSeat, deselectSeat, purchaseSeats } from '../controller/controllerConsumer';
@@ -202,6 +202,12 @@ function selectHandler(action) {
 
 }
 
+function generateReportHandler(navigate) {
+
+    navigate('/show-report');
+
+}
+
 const VenueView = () => {
 
     const navigate = useNavigate();
@@ -228,6 +234,7 @@ const VenueView = () => {
                     <button id="edit-blocks-btn" onClick={() => {navigate('/edit-blocks')}}>EDIT BLOCKS</button>
                     <button id="refresh-canvas-btn" onClick={() => {refreshCanvas(canvasRef.current)}}>LOAD SEATS</button>
                     <button id="venue-view-btn-refresh" onClick={() => {refreshHandler()}}>REFRESH</button>
+                    <button id="generate-show-report-btn" onClick={() => {generateReportHandler(navigate)}}>SHOW REPORT</button>
             </div>
             <div id="venue-view-content">
                 <div id="venue-view-show-div">
@@ -242,8 +249,8 @@ const VenueView = () => {
                         <div id="select-bar">
                             <input id="inp-select-row" placeholder="ROW"></input>
                             <input id="inp-select-col" placeholder="COLUMN"></input>
-                            <button id="select-seat-btn" onClick={() => {selectHandler("select")}}>SELECT</button>
-                            <button id="deselect-seat-btn" onClick={() => {selectHandler("deselect")}}>DESELECT</button>
+                            <button id="select-seat-btn" onClick={() => {selectHandler("select")}} disabled>SELECT</button>
+                            <button id="deselect-seat-btn" onClick={() => {selectHandler("deselect")}} disabled="true">DESELECT</button>
                         </div>
                         <canvas id="seats-canvas" ref={canvasRef}></canvas>
                         <div id="purchase-div">
@@ -255,7 +262,7 @@ const VenueView = () => {
                                 <p>Total Price: </p>
                                 <p id="label-total-price"></p>
                             </div>
-                            <button id="purchase-btn" onClick={() => {purchaseHandler(canvasRef.current)}}>PURCHASE</button>
+                            <button id="purchase-btn" onClick={() => {purchaseHandler(canvasRef.current)}} disabled="true">PURCHASE</button>
                         </div>
                     </div>
                 </div>

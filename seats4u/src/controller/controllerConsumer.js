@@ -80,7 +80,7 @@ export function listSelectedSeats() {
 
 }
 
-export function purchaseSeats(purchaseData, canvasObj) {
+export function purchaseSeats(showID, purchaseData, canvasObj) {
 
     let resource = '/purchaseSeats'
 

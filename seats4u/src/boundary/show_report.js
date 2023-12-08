@@ -7,6 +7,7 @@ const ShowReport = () => {
     
     useEffect(() => {
         generateShowReport(currentVenue)
+        console.log(currentVenue);
     }, []);
 
     const navigate = useNavigate()
@@ -16,7 +17,6 @@ const ShowReport = () => {
             <button id="btn-back-create-venue" class="btn-back" onClick={() => {navigate('/venue-view')}}>BACK</button>
             <div class="form">
                 <div id="show-report-container">
-
                 </div>
             </div>
         </div>

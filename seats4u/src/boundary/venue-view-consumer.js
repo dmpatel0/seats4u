@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { listShows, activateShow, deleteShowVM } from '../controller/controllerVenueManager';
-import { deleteShowAdmin } from '../controller/controllerAdmin';
+import { listActiveShows } from '../controller/controllerVenueManager';
 import { getModel } from '../App';
 import { getSeats, selectSeat, deselectSeat, purchaseSeats } from '../controller/controllerConsumer';
 
@@ -25,7 +24,7 @@ export function refreshHandler() {
         child = parent.lastElementChild;
     }
 
-    listShows(currentVenue);
+    listActiveShows(currentVenue);
 
 }
 
