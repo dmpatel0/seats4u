@@ -25,6 +25,33 @@ exports.handler = async (event) => {
         });
     }
 
+    let venueInformation = (showID) => {
+        return new Promise((resolve, reject) => {
+            pool.query("SELECT Venues.venueName, Venues.numRows FROM Shows JOIN Venues ON Shows.venueName = Venues.venueName WHERE (showID = ?)", [showID], (error, rows) => {
+                if (error) { return reject(error); }
+                if ((rows) && (rows.length == 1)) {
+                    return resolve(rows); 
+                } else {
+                    return resolve(false);
+                }
+            });
+        });
+    }
+
+    let getColumns = (venueName, sectionName) => {
+        return new Promise((resolve, reject) => {
+            pool.query("SELECT numOfCol FROM Sections WHERE (venueName = ? AND sectionName = ?)", [venueName, sectionName], (error, rows) => {
+                if (error) { return reject(error); }
+                if ((rows) && (rows.length == 1)) {
+                    return resolve(rows[0].numOfCol); 
+                } else {
+                    return resolve(false);
+                }
+            });
+        });
+    }
+    
+
     //gets the blockIDs for all blocks given a section and showID
     let getBlocks = (showID, sectionName) => {
         return new Promise((resolve, reject) => {
@@ -44,9 +71,9 @@ exports.handler = async (event) => {
         const can_create = await validateExists(event.showID);
     
         if(can_create){
-            let getSeats = (showID, blockID) => {
+            let getSeats = (showID) => {
                 return new Promise((resolve, reject) => {
-                    pool.query("SELECT * FROM Seats WHERE (showID = ? AND blockID = ?)", [showID,blockID], (error, rows) => {
+                    pool.query("SELECT * FROM Seats WHERE (showID = ?) ORDER BY rowNum, colNum", [showID], (error, rows) => {
                         if (error) { return reject(error); }
                         if ((rows)) {
                             return resolve(rows);
@@ -57,11 +84,15 @@ exports.handler = async (event) => {
                 });
             }   
             try{
+                let venue = await venueInformation(event.showID)
+                let nRows = venue[0].numRows;
+                let sectionName = undefined;
+                let leftCol = undefined;
+                let centerCol = undefined;
+                let rightCol = undefined;
 
-                let leftSeats = undefined;
-                let centerSeats = undefined;
-                let rightSeats = undefined;
-                let sectionName = undefined
+                let allSeats = await getSeats(event.showID);
+
                 for(let k = 0; k <=2; k++){
                     switch(k){
                         case 0:
@@ -76,21 +107,16 @@ exports.handler = async (event) => {
                         default:
                             break;
                     }
-                    let blocks = await getBlocks(event.showID, sectionName);
-                    let seats = [];
-                    for(let i = 0; i < blocks.length; i++){
-                        let newSeats = await getSeats(event.showID, blocks[i].blockID)
-                        seats = seats.concat(newSeats)
-                    }
+                    let columns = await getColumns(venue[0].venueName, sectionName);
                     switch(k){
                         case 0:
-                            leftSeats = seats;
+                            leftCol = columns;
                             break;
                         case 1:
-                            centerSeats = seats;
+                            centerCol = columns;
                             break;
                         case 2:
-                            rightSeats = seats;
+                            rightCol = columns;
                             break;
                         default:
                             break;
@@ -99,7 +125,10 @@ exports.handler = async (event) => {
                 response = {
                     statusCode: 200,
                     
-                    seats : {"left" : leftSeats, "center" : centerSeats, "right" : rightSeats}
+                    seats : {"seats": allSeats,
+                             "left" : {"rows" : nRows, "columns" : leftCol}, 
+                             "center" : {"rows" : nRows, "columns" : centerCol}, 
+                             "right" : {"rows" : nRows, "columns" : rightCol}}
                 }
             }catch(err){
                 response = {

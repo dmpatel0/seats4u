@@ -32,7 +32,7 @@ let findSection = (venueName, sectionName) => {
     return new Promise((resolve, reject) => {
         pool.query("SELECT * FROM Sections WHERE venueName=? AND sectionName = ?", [venueName, sectionName], (error, rows) => {
             if (error) { return reject(error); }
-            if (rows) {
+            if (rows && rows.length == 1) {
                 return resolve(rows); 
             } else {
                 return resolve(false);
@@ -60,7 +60,6 @@ let findBlockID = (showID, row, sectionID) => {
     return new Promise((resolve, reject) => {
         pool.query("SELECT blockID FROM Blocks WHERE showID=? AND sectionID = ? AND startRow <= ? AND endRow >= ?", [showID, sectionID, row, row], (error, rows) => {
             if (error) { return reject(error); }
-            console.log(rows)
             if ((rows) && (rows.length == 1)) {
                 return resolve(rows[0].blockID); 
             } else {
@@ -90,54 +89,53 @@ try{
     }
     let columns = 0;
     let sectionName = undefined;
-    for(let r = 0; r < rows; r++){
-        columns = 0
-        for(let k = 0; k <= 2; k++){
-            switch (k) {
-                case 0:
-                    sectionName = "left";
-                    break;
-                case 1:
-                    sectionName = "center";
-                    break;
-                case 2:
-                    sectionName = "right";
-                    break;
-                default:
-                    break;
-            }
-            try{
-                let sections = await findSection(event.venueName, sectionName);
-                let block = await findBlockID(showID, r+1, sections[0].sectionID)
-                for(let c = columns; c < columns+sections[0].numOfCol; c++){
-                    try{
-                        let addSeat = await createSeat(r+1, c+1, block);
-                        if(!addSeat){
+    for(let k = 0; k <= 2; k++){
+        switch (k) {
+            case 0:
+                sectionName = "left";
+                break;
+            case 1:
+                sectionName = "center";
+                break;
+            case 2:
+                sectionName = "right";
+                break;
+            default:
+                break;
+        }
+        for(let r = 0; r < rows; r++){
+            columns = 0
+                try{
+                    let sections = await findSection(event.venueName, sectionName);
+                    let block = await findBlockID(showID, r+1, sections[0].sectionID)
+                    for(let c = columns; c < columns+sections[0].numOfCol; c++){
+                        try{
+                            let addSeat = await createSeat(r+1, c+1, block);
+                            if(!addSeat){
+                                response = {
+                                    statusCode: 400,
+                                
+                                    error: "Row not affected"
+                                }
+                                break;
+                            }
+                        }
+                        catch(error){
                             response = {
                                 statusCode: 400,
-                            
-                                error: "Row not affected"
+                                
+                                "error" : error
                             }
-                            break;
                         }
                     }
-                    catch(error){
-                        response = {
-                            statusCode: 400,
-                            
-                            "error" : error
-                        }
+                    columns = columns+sections[0].numOfCol;
+                }catch(error){
+                    response = {
+                        statusCode: 400,
+                
+                        error: error
                     }
                 }
-                columns = columns+sections[0].numOfCol;
-            }catch(error){
-                response = {
-                    statusCode: 400,
-            
-                    error: error
-                }
-            }
-
         }
     }
     if(response === undefined){
