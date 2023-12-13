@@ -6,6 +6,7 @@ import { refreshHandler } from "../boundary/venue-view";
 import { getModel } from "../App";
 import { listSelectedSeats } from "./controllerConsumer";
 import { getVenueHandlerConsumer } from "../boundary/venue-view-consumer";
+import { wipBlocks } from "../boundary/edit_blocks";
 
 function createInitialSections(venueName, seatsLeft, seatsCenter, seatsRight) {
 
@@ -376,6 +377,7 @@ export function listBlocks(showID){
         document.getElementById("api-result").innerHTML = json.statusCode
         if(json.statusCode == 200){
             let blocks = json.blocks;
+            wipBlocks = json.blocks;
 
             for(let i = 0; i < blocks.length; i++){
                 let bID = blocks[i].blockID;
@@ -403,7 +405,7 @@ export function listBlocks(showID){
                 blockDiv.appendChild(endRow);
                 blockDiv.appendChild(blockPrice);
 
-                document.getElementById("blocks-view-list-div").appendChild(lob);
+                document.getElementById("blocks-view-list-div").appendChild(blockDiv);
             }
         }
         else if(json.statusCode == 400){
@@ -430,14 +432,6 @@ export function createBlock(listOfBlocks){
     }
 
     post(resource, payload, handler);
-}
-
-export function addBlock(blockID, showID, sectionID, blockStartRow, blockEndRow, blockPrice){
-    
-}
-
-export function deleteBlock(blockID){
-    
 }
 
 export function checkPassword(venueName, userPass, navFunc, action) {
