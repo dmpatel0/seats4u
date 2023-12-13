@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { listBlocks } from '../controller/controllerVenueManager'
 import { currentVenue } from './venue-view'
 import { useNavigate } from 'react-router-dom';
+import { createBlock } from '../controller/controllerVenueManager';
 import { getModel } from '../App';
 
 export let wipBlocks; // use json
@@ -75,7 +76,7 @@ function deleteBlockHandler(){
 
     // remove from wipBlocks
     for(let i = 0; i < wipBlocks.length; i++){
-        if(wipBlocks[i].blockID == bID){
+        if(wipBlocks[i].blockID === bID){
             delete wipBlocks[i];
             break;
         }

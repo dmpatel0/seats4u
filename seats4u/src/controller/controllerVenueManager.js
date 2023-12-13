@@ -376,7 +376,7 @@ export function listBlocks(showID){
 
     const handler = (json) => {
         document.getElementById("api-result").innerHTML = json.statusCode
-        if(json.statusCode == 200){
+        if(json.statusCode === 200){
             let blocks = json.blocks;
             wipBlocks = json.blocks;
 
@@ -409,7 +409,7 @@ export function listBlocks(showID){
                 document.getElementById("blocks-view-list-div").appendChild(blockDiv);
             }
         }
-        else if(json.statusCode == 400){
+        else if(json.statusCode === 400){
             // failure
         }
     }
@@ -424,10 +424,10 @@ export function createBlock(listOfBlocks){
 
     const handler = (json) => {
         document.getElementById("api-result").innerHTML = json.statusCode
-        if(json.statusCode == 200){
+        if(json.statusCode === 200){
             // success case
         }
-        else if(json.statusCode == 400){
+        else if(json.statusCode === 400){
             // error case, not every seat has a block
         }
     }
