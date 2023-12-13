@@ -367,36 +367,77 @@ export function deleteVenue(venueName) {
     post(resource, payload, handler)
 }
 
-export function addBlock(blockID, showID, sectionID, blockStartRow, blockEndRow, blockPrice) {
-    
-    let bID = blockID;
-    let sID = showID;
-    let secID = sectionID;
-    let startRow = blockStartRow;
-    let endRow = blockEndRow;
-    let price = blockPrice;
+export function listBlocks(showID){
+    let resource = '/listBlocks';
 
-    let resource = '/edit-blocks'
-
-    console.log(bID);
-    console.log(sID);
-    console.log(secID);
-    console.log(startRow);
-    console.log(endRow);
-    console.log(price);
-
-    let payload = {"blockID":bID, "showID":sID, "sectionID":sID, "blockStartRow":startRow, "blockEndRow":endRow, "blockPrice":price}
+    let payload = {"showID":showID};
 
     const handler = (json) => {
         document.getElementById("api-result").innerHTML = json.statusCode
-        if(json.statusCode === 200) {
-            // not doin anything rn
-        } else {
-            // not doin anything rn
+        if(json.statusCode == 200){
+            let blocks = json.blocks;
+
+            for(let i = 0; i < blocks.length; i++){
+                let bID = blocks[i].blockID;
+                let secID = blocks[i].sectionID;
+                let bStart = blocks[i].blockStartRow;
+                let bEnd = blocks[i].blockEndRow;
+                let bPrice = blocks[i].blockPrice;
+
+                let blockDiv = document.createElement('div');
+                blockDiv.className="block-view";
+
+                let blockID = document.createElement('p'); blockID.id="blockID"; blockID.innerText = bID; 
+
+                let sectionID = document.createElement('p'); sectionID.id="sectionID"; sectionID.innerText = secID; 
+
+                let startRow = document.createElement('p'); startRow.id="startRow"; startRow.innerText = bStart; 
+                
+                let endRow = document.createElement('p'); endRow.id="endRow"; endRow.innerText = bEnd; 
+
+                let blockPrice = document.createElement('p'); blockPrice.id="blockPrice"; blockPrice.innerText = bPrice; 
+
+                blockDiv.appendChild(blockID);
+                blockDiv.appendChild(sectionID);
+                blockDiv.appendChild(startRow);
+                blockDiv.appendChild(endRow);
+                blockDiv.appendChild(blockPrice);
+
+                document.getElementById("blocks-view-list-div").appendChild(lob);
+            }
+        }
+        else if(json.statusCode == 400){
+            // failure
         }
     }
 
     post(resource, payload, handler);
+}
+
+export function createBlock(listOfBlocks){
+    let resource = '/createBlock';
+
+    let payload = {"listOfBlocks":listOfBlocks};
+
+    const handler = (json) => {
+        document.getElementById("api-result").innerHTML = json.statusCode
+        if(json.statusCode == 200){
+            // success case
+        }
+        else if(json.statusCode == 400){
+            // error case, not every seat has a block
+        }
+    }
+
+    post(resource, payload, handler);
+}
+
+export function addBlock(blockID, showID, sectionID, blockStartRow, blockEndRow, blockPrice){
+    
+}
+
+export function deleteBlock(blockID){
+    
 }
 
 export function checkPassword(venueName, userPass, navFunc, action) {

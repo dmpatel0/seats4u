@@ -1,12 +1,18 @@
 import React, { useEffect } from 'react'
-import { addBlock } from '../controller/controllerVenueManager'
+import { listBlocks, addBlock, deleteBlock } from '../controller/controllerVenueManager'
 import { currentVenue } from './venue-view'
 import { currentShow } from './venue-view'
 import { useNavigate } from 'react-router-dom';
 
-function addBlockHandler() {
-    // Backend names: blockID, showID, sectionID, startRow, endRow, price
+export let wipBlocks; // use json
 
+function listBlocksHandler(){
+    let showID = document.getElementById("inp-showID").value;
+
+    listBlocks(showID);
+}
+
+function addBlockHandler() {
     let blockID = document.getElementById("inp-blockID").value;
     let showID = document.getElementById("inp-showID").value;
     let sectionID = document.getElementById("inp-sectionID").value;
@@ -15,6 +21,12 @@ function addBlockHandler() {
     let blockPrice = document.getElementById("inp-price").value;
 
     addBlock(blockID, showID, sectionID, blockStartRow, blockEndRow, blockPrice);
+}
+
+function deleteBlockHandler(){
+    let blockID = document.getElementById("inp-blockID").value;
+
+    deleteBlock(blockID);
 }
 
 const EditBlocks = () => {
@@ -38,7 +50,7 @@ const EditBlocks = () => {
                 </div>
             </div>
         </div>
-        <div id="add-block">
+        <div id="edit-block">
             <div id="venueName">
                 <h2>VENUE NAME</h2>
                 <label id="venue-name-label"></label>
@@ -60,6 +72,7 @@ const EditBlocks = () => {
                 <input id="inp-price" placeholder="Price within block"></input>
             </div>
             <button id="btn-add-block" onClick={() => {addBlockHandler()}}>ADD</button>
+            <button id="btn-delete-block" onClick={() => {deleteBlockHandler()}}>DELETE</button>
             <p id="api-result"></p>
         </div>        
     </div>
