@@ -5,6 +5,7 @@ export class Model {
         this.isAdmin = false;
         this.selectedSeats = new Map()
         this.totalPrice = 0;
+        this.currentShow = -1;
 
 
     }

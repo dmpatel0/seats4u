@@ -2,11 +2,13 @@ import React, { useEffect } from 'react'
 import { listBlocks } from '../controller/controllerVenueManager'
 import { currentVenue } from './venue-view'
 import { useNavigate } from 'react-router-dom';
+import { getModel } from '../App';
 
 export let wipBlocks; // use json
 
 function listBlocksHandler(){
-    let showID = document.getElementById("inp-showID").value;
+    // how getting showID
+    let showID = getModel().currentShow
 
     listBlocks(showID); // this function resets wipBlocks
 }
@@ -57,7 +59,7 @@ function createBlockHandler(){
 
 function addBlockHandler(){
     let blockID = 10; // make new id
-    let showID = 2; // get showID
+    let showID = getModel().currentShow
     let sectionID = document.getElementById("inp-sectionID").value;
     let bStartRow = document.getElementById("inp-startRow").value;
     let bEndRow = document.getElementById("inp-endRow").value;

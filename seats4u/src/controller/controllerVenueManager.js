@@ -326,6 +326,7 @@ export function listShows(venueName) {
                 show.onclick=(() => {
                     document.getElementById("label-show-id").innerText = `Current Show Name: ${show.lastElementChild.innerText} || Show ID: ${show.firstElementChild.innerText}`
                     document.getElementById("label-show-id").title = sID;
+                    getModel().currentShow = show.firstElementChild.innerText
                     getModel().selectedSeats.clear();
                     getModel().totalPrice = 0;
                     listSelectedSeats();
