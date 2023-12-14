@@ -4,9 +4,11 @@ export class Model {
 
         this.isAdmin = false;
         this.selectedSeats = new Map()
+        this.blockList = new Map()
         this.totalPrice = 0;
         this.currentShow = -1;
 
+        this.blockIDIter = 0;
 
     }
 
@@ -31,6 +33,21 @@ export class Model {
         this.selectedSeats.delete(seatPos);
         this.totalPrice -= seatPrice;
     }
+
+    addBlock(section, sRow, eRow, price) {
+
+        let block = new Block(section, sRow, eRow, price)
+
+        this.blockList.set(`${this.blockIDIter}`, block);
+
+        this.blockIDIter += 1;
+    }
+
+    removeBlock(blockID) {
+
+        this.blockList.delete(blockID)
+
+    }
 }
 
 export class Seat {
@@ -42,4 +59,14 @@ export class Seat {
         this.isPurchased = false;
     }
 
+}
+
+export class Block {
+
+    constructor(section, sRow, eRow, price) {
+        this.section = section;
+        this.sRow = sRow;
+        this.eRow = eRow;
+        this.price = price; 
+    }
 }

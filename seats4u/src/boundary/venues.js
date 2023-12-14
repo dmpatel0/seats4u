@@ -102,6 +102,9 @@ function searchHandler(action) {
         for(let i=0; i<allVenues.length; i++) {
             let allShows = allVenues[i].lastChild.lastChild.childNodes
             console.log(allShows)
+
+            let matchedShows = []
+            
             for(let j=0; j<allShows.length; j++) {
                 //console.log(`Show: ${allShows[j].firstElementChild.innerText}`)
                 if(allShows[j].firstElementChild.innerText.includes(query)) {

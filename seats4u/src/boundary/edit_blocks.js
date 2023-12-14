@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { createBlock } from '../controller/controllerVenueManager';
 import { getModel } from '../App';
 
-export let wipBlocks; // use json
+export let wipBlocks = []; // use json
 
 function listBlocksHandler(){
     // how getting showID
@@ -14,8 +14,9 @@ function listBlocksHandler(){
     listBlocks(showID); // this function resets wipBlocks
 }
 
-function refreshHandler(){
-    let parent = document.getElementById("blocks-view-list-div");
+function refreshHandler() {
+
+    let parent = document.getElementById("b-list");
     let child = parent.lastElementChild;
 
     while(child){
@@ -23,63 +24,80 @@ function refreshHandler(){
         child = parent.lastElementChild;
     }
 
-    let blocks = wipBlocks;
-    for(let i = 0; i < blocks.length; i++){
-        let bID = blocks[i].blockID;
-        let secID = blocks[i].sectionID;
-        let bStart = blocks[i].blockStartRow;
-        let bEnd = blocks[i].blockEndRow;
-        let bPrice = blocks[i].blockPrice;
+    let blocks = [];
+
+    for(let [key, value] of getModel().blockList) {
+        blocks.push([key, value])
+    }
+
+    for(let i = 0; i < blocks.length; i++) {
+
+        let bID = blocks[i][0]
+        let secName = blocks[i][1].section
+        let bStart = blocks[i][1].sRow
+        let bEnd = blocks[i][1].eRow
+        let bPrice = blocks[i][1].price
 
         let blockDiv = document.createElement('div');
         blockDiv.className="block-view";
 
-        let blockID = document.createElement('p'); blockID.id="blockID"; blockID.innerText = bID; 
+        blockDiv.innerText = `Block ID: ${bID} - Section: ${secName} - Start Row: ${bStart} - End Row: ${bEnd} - Price: ${bPrice}`
 
-        let sectionID = document.createElement('p'); sectionID.id="sectionID"; sectionID.innerText = secID; 
-
-        let startRow = document.createElement('p'); startRow.id="startRow"; startRow.innerText = bStart; 
-        
-        let endRow = document.createElement('p'); endRow.id="endRow"; endRow.innerText = bEnd; 
-
-        let blockPrice = document.createElement('p'); blockPrice.id="blockPrice"; blockPrice.innerText = bPrice; 
-
-        blockDiv.appendChild(blockID);
-        blockDiv.appendChild(sectionID);
-        blockDiv.appendChild(startRow);
-        blockDiv.appendChild(endRow);
-        blockDiv.appendChild(blockPrice);
-
-        document.getElementById("blocks-view-list-div").appendChild(blockDiv);
+        document.getElementById("b-list").appendChild(blockDiv);
     }
 }
 
-function createBlockHandler(){
-    createBlock(wipBlocks);
+function createBlockHandler() {
+
+    let payload = {};
+    payload.showID = getModel().currentShow;
+    let listOfBlocks = [];
+    payload.listOfBlocks = listOfBlocks;
+
+    for(let value of getModel().blockList.values()) {
+
+        let sRow = value.sRow
+        let eRow = value.eRow
+        let price = value.price
+        let sectionName = value.sectionName
+
+        let block = {
+            "startRow":sRow,
+            "endRow":eRow,
+            "price":price,
+            "sectionName":sectionName
+        }
+
+        payload.listOfBlocks.push(block);
+    }
+
+    console.log(payload); 
+
+    createBlock(payload);
 }
 
-function addBlockHandler(){
-    let blockID = 10; // make new id
-    let showID = getModel().currentShow
-    let sectionID = document.getElementById("inp-sectionID").value;
+function addBlockHandler() {
+
+    let sectionName = document.getElementById("inp-sectionID").value;
     let bStartRow = document.getElementById("inp-startRow").value;
     let bEndRow = document.getElementById("inp-endRow").value;
     let bPrice = document.getElementById("inp-price").value;
 
-    wipBlocks.push({"blockID":blockID, "showID":showID, "sectionID":sectionID, "blockStartRow":bStartRow, "blockEndRow":bEndRow, "blockPrice":bPrice});
+    getModel().addBlock(sectionName, bStartRow, bEndRow, bPrice);
 
     refreshHandler();
 }
 
-function deleteBlockHandler(){
-    let bID = document.getElementById("inp-blockID").value;
+function deleteBlockHandler() {
 
-    // remove from wipBlocks
-    for(let i = 0; i < wipBlocks.length; i++){
-        if(wipBlocks[i].blockID === bID){
-            delete wipBlocks[i];
-            break;
-        }
+    let bID = document.getElementById("inp-blockID").value;
+    console.log(`delete called for block id: ${bID}`)
+
+    getModel().removeBlock(bID)
+
+    console.log("keys after delete")
+    for(let id of getModel().blockList.keys()) {
+        console.log(id);
     }
 
     refreshHandler();
@@ -91,7 +109,7 @@ const EditBlocks = () => {
 
     useEffect(() => {
         document.getElementById("venue-name-label").innerHTML = currentVenue;
-        document.getElementById("show-name-label").innerHTML = 10;
+        document.getElementById("show-name-label").innerHTML = getModel().currentShow;
     })
 
     return (
@@ -102,8 +120,7 @@ const EditBlocks = () => {
             <div id="blocks-list">
                 <div id="blocks-view-list-div">
                     <h2>CURRENT BLOCKS</h2>
-                    <div id="blocks-view-list-div">
-                        <div></div>
+                    <div id="b-list">
                     </div>
                 </div>
                 <button id="btn-create-block" onClick={() => {createBlockHandler()}}>CREATE</button>

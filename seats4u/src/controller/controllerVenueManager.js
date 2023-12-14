@@ -417,18 +417,19 @@ export function listBlocks(showID){
     post(resource, payload, handler);
 }
 
-export function createBlock(listOfBlocks){
-    let resource = '/createBlock';
+export function createBlock(payload){
 
-    let payload = {"listOfBlocks":listOfBlocks};
+    let resource = '/createBlocks';
 
     const handler = (json) => {
         document.getElementById("api-result").innerHTML = json.statusCode
         if(json.statusCode === 200){
-            // success case
+            console.log("BLOCKS CREATED")
+            console.log(json)
         }
         else if(json.statusCode === 400){
-            // error case, not every seat has a block
+            console.log("ERROR CREATING NEW BLOCKS")
+            console.log(json)
         }
     }
 
