@@ -51,24 +51,25 @@ function createBlockHandler() {
 
     let payload = {};
     payload.showID = getModel().currentShow;
-    let listOfBlocks = [];
-    payload.listOfBlocks = listOfBlocks;
+    let blocks = [];
+    payload.blocks = blocks;
 
     for(let value of getModel().blockList.values()) {
 
         let sRow = value.sRow
         let eRow = value.eRow
         let price = value.price
-        let sectionName = value.sectionName
+        let sectionName = value.section
+        console.log("creating block, section: " + sectionName);
 
         let block = {
+            "sectionName":sectionName,
             "startRow":sRow,
             "endRow":eRow,
-            "price":price,
-            "sectionName":sectionName
+            "price":price
         }
 
-        payload.listOfBlocks.push(block);
+        payload.blocks.push(block);
     }
 
     console.log(payload); 
@@ -78,7 +79,8 @@ function createBlockHandler() {
 
 function addBlockHandler() {
 
-    let sectionName = document.getElementById("inp-sectionID").value;
+    let sectionName = document.getElementById("inp-sectionName").value;
+    console.log("adding block, section: " + sectionName);
     let bStartRow = document.getElementById("inp-startRow").value;
     let bEndRow = document.getElementById("inp-endRow").value;
     let bPrice = document.getElementById("inp-price").value;
@@ -132,9 +134,9 @@ const EditBlocks = () => {
                     <h2>VENUE NAME</h2>
                     <label id="venue-name-label"></label>
                 </div>
-                <div id="sectionID">
+                <div id="sectionName">
                     <h2>SECTION</h2>
-                    <input id="inp-sectionID" placeholder="Section"></input>
+                    <input id="inp-sectionName" placeholder="Section"></input>
                 </div>
                 <div id="startRow">
                     <h2>START ROW</h2>

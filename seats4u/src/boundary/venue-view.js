@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { listShows, activateShow, deleteShowVM, generateShowReport } from '../controller/controllerVenueManager';
+import { listShows, activateShow, deleteShowVM, listBlocks } from '../controller/controllerVenueManager';
 import { deleteShowAdmin } from '../controller/controllerAdmin';
 import { getModel } from '../App';
 import { getSeats, selectSeat, deselectSeat, purchaseSeats } from '../controller/controllerConsumer';
@@ -244,6 +244,7 @@ const VenueView = () => {
                     <button id="delete-show-btn" onClick={() => {deleteHandler()}}>DELETE SHOW</button>
                     <button id="activate-show-btn" onClick={() => {activateHandler()}}>ACTIVATE SHOW</button>
                     <button id="edit-blocks-btn" onClick={() => {navigate('/edit-blocks')}}>EDIT BLOCKS</button>
+                    <button id="list-blocks-btn" onClick={() => {listBlocks(getModel().currentShow, "block-list")}}>LIST BLOCKS</button>
                     <button id="refresh-canvas-btn" onClick={() => {refreshCanvas(canvasRef.current)}}>LOAD SEATS</button>
                     <button id="venue-view-btn-refresh" onClick={() => {refreshHandler()}}>REFRESH</button>
                     <button id="generate-show-report-btn" onClick={() => {generateReportHandler(navigate)}}>SHOW REPORT</button>
@@ -280,7 +281,9 @@ const VenueView = () => {
                 </div>
                 <div id="block-div">
                         <h2>BLOCKS</h2>
-                        <div id="block-list"></div>
+                        <div id="block-list">
+
+                        </div>
                         <h2>SELECTED SEATS</h2>
                         <div id="selected-seats-list"></div>
                 </div>

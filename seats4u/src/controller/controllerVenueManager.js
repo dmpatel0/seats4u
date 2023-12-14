@@ -369,30 +369,34 @@ export function deleteVenue(venueName) {
     post(resource, payload, handler)
 }
 
-export function listBlocks(showID){
+export function listBlocks(showID, parentDiv){
     let resource = '/listBlocks';
 
     let payload = {"showID":showID};
 
     const handler = (json) => {
-        document.getElementById("api-result").innerHTML = json.statusCode
         if(json.statusCode === 200){
+            console.log("200 LIST BLOCKS");
+
             let blocks = json.blocks;
-            wipBlocks = json.blocks;
 
             for(let i = 0; i < blocks.length; i++){
-                let bID = blocks[i].blockID;
-                let secID = blocks[i].sectionID;
-                let bStart = blocks[i].blockStartRow;
-                let bEnd = blocks[i].blockEndRow;
-                let bPrice = blocks[i].blockPrice;
+                console.log("Started for loop");
+
+                let secName = blocks[i].sectionName;
+                let bStart = blocks[i].startRow;
+                let bEnd = blocks[i].endRow;
+                let bPrice = blocks[i].price;
+
+                console.log(secName);
+                console.log(bStart);
+                console.log(bEnd);
+                console.log(bPrice);
 
                 let blockDiv = document.createElement('div');
                 blockDiv.className="block-view";
 
-                let blockID = document.createElement('p'); blockID.id="blockID"; blockID.innerText = bID; 
-
-                let sectionID = document.createElement('p'); sectionID.id="sectionID"; sectionID.innerText = secID; 
+                let sectionName = document.createElement('p'); sectionName.id="sectionName"; sectionName.innerText = secName; 
 
                 let startRow = document.createElement('p'); startRow.id="startRow"; startRow.innerText = bStart; 
                 
@@ -400,17 +404,23 @@ export function listBlocks(showID){
 
                 let blockPrice = document.createElement('p'); blockPrice.id="blockPrice"; blockPrice.innerText = bPrice; 
 
-                blockDiv.appendChild(blockID);
-                blockDiv.appendChild(sectionID);
+                console.log("ELEMENTS CREATED");
+
+                blockDiv.appendChild(sectionName);
                 blockDiv.appendChild(startRow);
                 blockDiv.appendChild(endRow);
                 blockDiv.appendChild(blockPrice);
 
-                document.getElementById("blocks-view-list-div").appendChild(blockDiv);
+                console.log("ELEMENTS APPENDED");
+
+                document.getElementById(parentDiv).appendChild(blockDiv);
+
+                console.log("FINAL APPEND");
             }
         }
         else if(json.statusCode === 400){
             // failure
+            console.log(400);
         }
     }
 
