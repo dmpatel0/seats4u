@@ -10,9 +10,9 @@ exports.handler = async (event) => {
         database: db_access.config.database
     });
 
-    let checkActive = (venueName, showName, showTime) => {
+    let checkActive = (showID) => {
         return new Promise((resolve, reject) => {
-            pool.query("SELECT Shows.isActive FROM Shows WHERE venueName=? AND showName=? AND showTime=?", [venueName, showName, showTime], (error, rows) => {
+            pool.query("SELECT Shows.isActive FROM Shows WHERE showID = ? AND showTime >= CURRENT_TIMESTAMP", [showID], (error, rows) => {
                 if (error) { return reject(error); }
                 if ((rows) && (rows.length == 1)) {
                     if(rows[0].isActive === 1){
@@ -30,15 +30,15 @@ exports.handler = async (event) => {
 
     let response = undefined;
     try{
-        let showActive = await checkActive(event.venueName, event.showName, event.showTime);
+        let showActive = await checkActive(event.showID);
 
         if(!showActive){
-            let activateShows = (venueName, showName, showTime) => {
+            let activateShows = (showID) => {
                 return new Promise((resolve, reject) => {
-                    pool.query("UPDATE Shows SET isActive = 1 WHERE venueName=? AND showName=? AND showTime=?", [venueName, showName, showTime], (error, rows) => {
+                    pool.query("UPDATE Shows SET isActive = 1 WHERE showID = ?", [showID], (error, rows) => {
                         if (error) { return reject(error); }
                         console.log(rows)
-                        if ((rows) && (rows.length == 1)) {
+                        if ((rows) && (rows.affectedRows == 1)) {
                             return resolve(true); 
                         } else {
                             return resolve(false);
@@ -48,25 +48,27 @@ exports.handler = async (event) => {
             }
         
             try{
-                const result = await activateShows(event.venueName, event.showName, event.showTime);
+                const result = await activateShows(event.showID);
         
                 response = {
                     statusCode : 200,
 
-                    venueName : event.venueName,
-
-                    showName : event.showName,
-
-                    showTime : event.showTime,
+                    showID : event.showID,
         
-                    password : result
+                    success : result
                 }
             }catch(err){
                 response = {
                     statusCode : 400,
         
-                    error : err
+                    error : JSON.stringify(err)
                 }
+            }
+        }else{
+            response = {
+                statusCode : 404,
+        
+                error : "Show is already active"
             }
         }
 
@@ -74,7 +76,7 @@ exports.handler = async (event) => {
         response = {
             statusCode : 400,
 
-            error : err
+            error : JSON.stringify(err)
         }
     }finally{
         pool.end()

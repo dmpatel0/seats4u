@@ -96,7 +96,7 @@ exports.handler = async (event) => {
                         }
                     });
                 });
-            }   
+            }
             try{
                 let venue = await venueInformation(event.showID);
                 let nRows = venue[0].numRows;
