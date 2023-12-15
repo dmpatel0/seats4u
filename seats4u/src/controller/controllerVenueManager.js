@@ -1,12 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { post, get } from "./api"
 import { listVenuesHandler } from "../boundary/venues";
-import { getVenueHandler } from "../boundary/venue-view";
-import { refreshHandler } from "../boundary/venue-view";
+import { getVenueHandler, refreshHandler, blockColors } from "../boundary/venue-view";
 import { getModel } from "../App";
 import { listSelectedSeats } from "./controllerConsumer";
 import { getVenueHandlerConsumer } from "../boundary/venue-view-consumer";
-import { wipBlocks } from "../boundary/edit_blocks";
 
 function createInitialSections(venueName, seatsLeft, seatsCenter, seatsRight) {
 
@@ -167,6 +165,24 @@ export function activateShow(showID) {
 
 }
 
+export function checkBlocks(showID) {
+    
+    let resource = '/checkBlocks'
+
+    let payload = {"showID":showID}
+
+    const handler = (json) => {
+        if(json.statusCode === 200) {
+            activateShow(showID);
+        } else {
+            alert("Error: Either blocks overlap or seats are not assigned to a block, please remake blocks and create again before activating...")
+        }
+    }
+
+    post(resource, payload, handler)
+
+}
+
 export function listVenues(navigate) {
 
     function venueHTML() {
@@ -279,6 +295,7 @@ export function listActiveShows(venueName) {
                 show.onclick=(() => {
                     document.getElementById("label-show-id").innerText = `Current Show Name: ${show.lastElementChild.innerText} || Show ID: ${show.firstElementChild.innerText}`
                     document.getElementById("label-show-id").title = sID;
+                    getModel().currentShow = show.firstElementChild.innerText
                     getModel().selectedSeats.clear();
                     getModel().totalPrice = 0;
                     listSelectedSeats();
@@ -288,6 +305,11 @@ export function listActiveShows(venueName) {
                 let showName = document.createElement('p'); showName.id="showName"; showName.innerText=`${sName}\n${sDateTime}`; 
 
                 show.appendChild(showID); show.appendChild(showName);
+
+                if(shows[i].isSoldOut === true) {
+                    console.log("SHOW IS SOLD OUT")
+                    show.style.backgroundColor = "#ff4f4f"
+                }
 
                 document.getElementById("venue-view-show-list").appendChild(show);
             }
@@ -370,6 +392,7 @@ export function deleteVenue(venueName) {
 }
 
 export function listBlocks(showID, parentDiv){
+
     let resource = '/listBlocks';
 
     let payload = {"showID":showID};
@@ -378,6 +401,7 @@ export function listBlocks(showID, parentDiv){
         if(json.statusCode === 200){
             console.log("200 LIST BLOCKS");
 
+            console.log(json);
             let blocks = json.blocks;
 
             for(let i = 0; i < blocks.length; i++){
@@ -387,6 +411,9 @@ export function listBlocks(showID, parentDiv){
                 let bStart = blocks[i].startRow;
                 let bEnd = blocks[i].endRow;
                 let bPrice = blocks[i].price;
+                let bID = blocks[i].blockID;
+                let ticketsRemain = blocks[i].ticketsRemaining;
+                let ticketsPurchased = blocks[i].ticketsPurchased;
 
                 console.log(secName);
                 console.log(bStart);
@@ -396,22 +423,11 @@ export function listBlocks(showID, parentDiv){
                 let blockDiv = document.createElement('div');
                 blockDiv.className="block-view";
 
-                let sectionName = document.createElement('p'); sectionName.id="sectionName"; sectionName.innerText = secName; 
+                blockDiv.innerText = `Section: ${secName} - Start Row: ${bStart} - End Row: ${bEnd} - Price: ${bPrice} - Tot. Purchased: ${ticketsPurchased} - Tot. Remain: ${ticketsRemain}`
 
-                let startRow = document.createElement('p'); startRow.id="startRow"; startRow.innerText = bStart; 
-                
-                let endRow = document.createElement('p'); endRow.id="endRow"; endRow.innerText = bEnd; 
+                //console.log("ELEMENTS APPENDED");
 
-                let blockPrice = document.createElement('p'); blockPrice.id="blockPrice"; blockPrice.innerText = bPrice; 
-
-                console.log("ELEMENTS CREATED");
-
-                blockDiv.appendChild(sectionName);
-                blockDiv.appendChild(startRow);
-                blockDiv.appendChild(endRow);
-                blockDiv.appendChild(blockPrice);
-
-                console.log("ELEMENTS APPENDED");
+                blockDiv.style.color = blockColors[bID % 10];
 
                 document.getElementById(parentDiv).appendChild(blockDiv);
 
@@ -435,7 +451,8 @@ export function createBlock(payload){
         document.getElementById("api-result").innerHTML = json.statusCode
         if(json.statusCode === 200){
             console.log("BLOCKS CREATED")
-            console.log(json)
+            console.log(`Calling update seats for show: ${payload.showID}`)
+            updateSeats(payload.showID)
         }
         else if(json.statusCode === 400){
             console.log("ERROR CREATING NEW BLOCKS")
@@ -444,6 +461,25 @@ export function createBlock(payload){
     }
 
     post(resource, payload, handler);
+}
+
+function updateSeats(showID) {
+
+    let resource = '/updateSeats'
+
+    let payload = {"showID":showID}
+
+    const handler = (json) => {
+        if(json.statusCode === 200) {
+            console.log("Seat blocks updated!")
+        } else {
+            console.log(`Error updating seats: ${json}`)
+            alert("Blocks are overlapping or seats are not assigned to a black, please remake configuration and try again");
+        }
+    }
+
+    post(resource, payload, handler)
+
 }
 
 export function checkPassword(venueName, userPass, navFunc, action) {
@@ -518,7 +554,11 @@ export function generateShowReport(currentVenue) {
     const handler = (json) => {
         if(json.statusCode === 200){
 
+            let grandTotalProfit = 0;
+            let grandTotalTicketsSold = 0;
+
             let venueContainer = document.getElementById("show-report-container");
+
             let report = json.report;
 
             let reportDiv = reportHTML(currentVenue);
@@ -531,6 +571,9 @@ export function generateShowReport(currentVenue) {
                 let sTicketsPurchased = report[i].ticketsPurchased; console.log(sTicketsPurchased);
                 let sTicketsRemaining = report[i].ticketsRemaining; console.log(sTicketsRemaining);
                 let sProfit = report[i].totalProfit; console.log(sProfit);
+
+                grandTotalProfit += sProfit;
+                grandTotalTicketsSold += sTicketsPurchased;
 
                 let show = document.createElement('div'); show.className="show-sr";
                 let showID = document.createElement('p'); showID.id="showID"; showID.innerText = `Show ID: ${sID}\n`
@@ -551,6 +594,11 @@ export function generateShowReport(currentVenue) {
 
                 reportDiv.firstChild.lastChild.appendChild(show)
             }
+
+            let grandTotalDiv = document.createElement('div'); grandTotalDiv.className = "gTot-sr";
+            grandTotalDiv.innerText = `Total Revenue: ${grandTotalProfit} --- Total Tickets Sold: ${grandTotalTicketsSold}`
+
+            reportDiv.firstChild.lastChild.appendChild(grandTotalDiv);
             
             venueContainer.appendChild(reportDiv);
         }

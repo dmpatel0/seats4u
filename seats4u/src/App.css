@@ -203,6 +203,10 @@ button:hover {
   width: 250px;
 }
 
+.sold-out {
+  background: #ff4f4f
+}
+
 /* STYLING CODE FOR THE VENUE VIEW VIEW */
 
 .venue-view {

@@ -2,7 +2,8 @@ import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { listActiveShows } from '../controller/controllerVenueManager';
 import { getModel } from '../App';
-import { getSeats, selectSeat, deselectSeat, purchaseSeats } from '../controller/controllerConsumer';
+import { blockColors } from './venue-view';
+import { getSeats, selectSeat, deselectSeat, purchaseSeats, listBlocksConsumer } from '../controller/controllerConsumer';
 
 export let currentVenue;
 
@@ -87,45 +88,12 @@ export function redrawCanvas(json, canvasObj) {
 
                 let index = (r * totalColumns) + c
 
-                switch(i) {
-                    
-                    case 0:
-                        if(json.seats.seats[index].isPurchased === 1) {
-                            ctx.fillStyle = "red";
-                        } else {
-                            if(i % 2 === 0) {
-                                ctx.fillStyle = "white"
-                            } else {
-                                ctx.fillStyle = "silver";
-                            }
-                        }
-                        ctx.strokeStyle = "fuschsia"
-                        break;
-                    case 1:
-                        if(json.seats.seats[index].isPurchased === 1) {
-                            ctx.fillStyle = "red";
-                        } else {
-                            if(i % 2 === 0) {
-                                ctx.fillStyle = "white"
-                            } else {
-                                ctx.fillStyle = "silver";
-                            }
-                        }
-                        break;
-                    case 2:
-                        if(json.seats.seats[index].isPurchased === 1) {
-                            ctx.fillStyle = "red";
-                        } else {
-                            if(i % 2 === 0) {
-                                ctx.fillStyle = "white"
-                            } else {
-                                ctx.fillStyle = "silver";
-                            }
-                        }
-                        break;
-                    default:
-                        break;
+                if(json.seats.seats[index].isPurchased === 1) {
+                    ctx.fillStyle = "black";
+                } else {
+                    ctx.fillStyle = blockColors[(json.seats.seats[index].blockID) % 10]
                 }
+                
                 ctx.fill()
                 ctx.stroke()
             }
@@ -179,6 +147,22 @@ function selectHandler(action) {
 
 }
 
+export function listBlocksHandlerConsumer() {
+
+    let parent = document.getElementById("block-list")
+    let child = parent.lastElementChild;
+    while(child) {
+        parent.removeChild(child);
+        child = parent.lastElementChild;
+    }
+
+    let parentDivID = "block-list"
+    let showID = getModel().currentShow;
+    
+    listBlocksConsumer(showID, parentDivID)
+
+}
+
 const VenueViewConsumer = () => {
 
     const navigate = useNavigate();
@@ -196,6 +180,7 @@ const VenueViewConsumer = () => {
             <h1 id="venue-view-name">WPI</h1>
             <label id="label-show-id">TEST</label>
             <div id="venue-view-buttons">
+                    <button id="list-blocks-btn" onClick={() => {listBlocksHandlerConsumer()}}>LIST BLOCKS</button>
                     <button id="refresh-canvas-btn" onClick={() => {refreshCanvas(canvasRef.current)}}>LOAD SEATS</button>
                     <button id="venue-view-btn-refresh" onClick={() => {refreshHandler()}}>REFRESH</button>
             </div>

@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { listShows, activateShow, deleteShowVM, listBlocks } from '../controller/controllerVenueManager';
+import { listShows, activateShow, deleteShowVM, listBlocks, checkBlocks } from '../controller/controllerVenueManager';
 import { deleteShowAdmin } from '../controller/controllerAdmin';
 import { getModel } from '../App';
 import { getSeats, selectSeat, deselectSeat, purchaseSeats } from '../controller/controllerConsumer';
 
 export let currentVenue;
+
+export let blockColors = ["orange", "blue", "gray", "white", "yellow", "green", "purple", "brown", "red", "deeppink"]
 
 export function getVenueHandler(venue) {
     currentVenue = venue;
@@ -26,6 +28,22 @@ export function refreshHandler() {
     }
 
     listShows(currentVenue);
+
+}
+
+export function listBlocksHandler() {
+
+    let parent = document.getElementById("block-list")
+    let child = parent.lastElementChild;
+    while(child) {
+        parent.removeChild(child);
+        child = parent.lastElementChild;
+    }
+
+    let parentDivID = "block-list"
+    let showID = getModel().currentShow;
+    
+    listBlocks(showID, parentDivID)
 
 }
 
@@ -103,44 +121,12 @@ export function redrawCanvas(json, canvasObj) {
 
                 let index = (r * totalColumns) + c
 
-                switch(i) {
-                    
-                    case 0:
-                        if(json.seats.seats[index].isPurchased === 1) {
-                            ctx.fillStyle = "red";
-                        } else {
-                            if(i % 2 === 0) {
-                                ctx.fillStyle = "white"
-                            } else {
-                                ctx.fillStyle = "silver";
-                            }
-                        }
-                        break;
-                    case 1:
-                        if(json.seats.seats[index].isPurchased === 1) {
-                            ctx.fillStyle = "red";
-                        } else {
-                            if(i % 2 === 0) {
-                                ctx.fillStyle = "white"
-                            } else {
-                                ctx.fillStyle = "silver";
-                            }
-                        }
-                        break;
-                    case 2:
-                        if(json.seats.seats[index].isPurchased === 1) {
-                            ctx.fillStyle = "red";
-                        } else {
-                            if(i % 2 === 0) {
-                                ctx.fillStyle = "white"
-                            } else {
-                                ctx.fillStyle = "silver";
-                            }
-                        }
-                        break;
-                    default:
-                        break;
+                if(json.seats.seats[index].isPurchased === 1) {
+                    ctx.fillStyle = "black";
+                } else {
+                    ctx.fillStyle = blockColors[(json.seats.seats[index].blockID) % 10]
                 }
+
                 ctx.fill()
                 ctx.stroke()
             }
@@ -172,7 +158,7 @@ function activateHandler() {
 
     let sID = prompt("What is the ID of the show you want to activate?");
 
-    activateShow(sID);
+    checkBlocks(sID);
 
 }
 
@@ -244,7 +230,7 @@ const VenueView = () => {
                     <button id="delete-show-btn" onClick={() => {deleteHandler()}}>DELETE SHOW</button>
                     <button id="activate-show-btn" onClick={() => {activateHandler()}}>ACTIVATE SHOW</button>
                     <button id="edit-blocks-btn" onClick={() => {navigate('/edit-blocks')}}>EDIT BLOCKS</button>
-                    <button id="list-blocks-btn" onClick={() => {listBlocks(getModel().currentShow, "block-list")}}>LIST BLOCKS</button>
+                    <button id="list-blocks-btn" onClick={() => {listBlocksHandler()}}>LIST BLOCKS</button>
                     <button id="refresh-canvas-btn" onClick={() => {refreshCanvas(canvasRef.current)}}>LOAD SEATS</button>
                     <button id="venue-view-btn-refresh" onClick={() => {refreshHandler()}}>REFRESH</button>
                     <button id="generate-show-report-btn" onClick={() => {generateReportHandler(navigate)}}>SHOW REPORT</button>

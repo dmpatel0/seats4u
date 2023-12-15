@@ -1,6 +1,7 @@
 import { redrawCanvas, refreshCanvas } from "../boundary/venue-view"
 import { post, get } from "./api"
 import { getModel } from "../App"
+import { blockColors } from "../boundary/venue-view"
 
 export function getSeats(showID, canvasObj) {
 
@@ -102,4 +103,55 @@ export function purchaseSeats(showID, purchaseData, canvasObj) {
 
     post(resource, payload, handler);
 
+}
+
+export function listBlocksConsumer(showID, parentDiv){
+
+    let resource = '/listBlocks';
+
+    let payload = {"showID":showID};
+
+    const handler = (json) => {
+        if(json.statusCode === 200){
+            console.log("200 LIST BLOCKS");
+            console.log(json)
+            let blocks = json.blocks;
+
+            for(let i = 0; i < blocks.length; i++){
+                console.log("Started for loop");
+
+                let secName = blocks[i].sectionName;
+                let bStart = blocks[i].startRow;
+                let bEnd = blocks[i].endRow;
+                let bPrice = blocks[i].price;
+                let bID = blocks[i].blockID;
+                let ticketsRemain = blocks[i].ticketsRemaining;
+                let ticketsPurchased = blocks[i].ticketsPurchased;
+
+                console.log(secName);
+                console.log(bStart);
+                console.log(bEnd);
+                console.log(bPrice);
+
+                let blockDiv = document.createElement('div');
+                blockDiv.className="block-view";
+
+                blockDiv.innerText = `Section: ${secName} - Start Row: ${bStart} - End Row: ${bEnd} - Price: ${bPrice} - Tot. Purchased: ${ticketsPurchased} - Tot. Remain: ${ticketsRemain}`
+
+                //console.log("ELEMENTS APPENDED");
+
+                blockDiv.style.color = blockColors[bID % 10];
+
+                document.getElementById(parentDiv).appendChild(blockDiv);
+
+                console.log("FINAL APPEND");
+            }
+        }
+        else if(json.statusCode === 400){
+            // failure
+            console.log(400);
+        }
+    }
+
+    post(resource, payload, handler);
 }

@@ -100,21 +100,43 @@ function searchHandler(action) {
     } else if(action === "show") {
         let allVenues = document.getElementById("venues-data-container").children
         for(let i=0; i<allVenues.length; i++) {
+
             let allShows = allVenues[i].lastChild.lastChild.childNodes
             console.log(allShows)
 
+            let matchedShowsNames = []
             let matchedShows = []
             
             for(let j=0; j<allShows.length; j++) {
                 //console.log(`Show: ${allShows[j].firstElementChild.innerText}`)
                 if(allShows[j].firstElementChild.innerText.includes(query)) {
-                    foundVenues.push(allVenues[i])
+                    console.log(`first loop text: ${allShows[j].firstElementChild.innerText}`)
+                    matchedShowsNames.push(allShows[j].firstElementChild.innerText)
+                    matchedShows.push(allShows[j]);
                 }
             }
+
+            let venueParent = allVenues[i];
+
+            if(matchedShows.length > 0) {
+
+                for(let k = 0; k < allShows.length; k++) {
+
+                    let child = allShows[k];
+
+                    if(matchedShowsNames.includes(child.firstElementChild.innerText)) {
+                        continue;
+                    } else {
+                        venueParent.lastChild.lastChild.removeChild(child);
+                    }
+                }
+            
+                foundVenues.push(allVenues[i])
+            }
+
         }
     }
     
-
     // REMOVE ALL CURRENT VENUES
     let parent = document.getElementById("venues-data-container");
     let child = parent.lastElementChild;
