@@ -25,6 +25,33 @@ exports.handler = async (event) => {
         });
     }
 
+    let venueInformation = (showID) => {
+        return new Promise((resolve, reject) => {
+            pool.query("SELECT Venues.venueName, Venues.numRows FROM Shows JOIN Venues ON Shows.venueName = Venues.venueName WHERE (showID = ?)", [showID], (error, rows) => {
+                if (error) { return reject(error); }
+                if ((rows) && (rows.length == 1)) {
+                    return resolve(rows); 
+                } else {
+                    return resolve(false);
+                }
+            });
+        });
+    }
+
+    //get the sections for the venueName
+    let findSection = (venueName, sectionName) => {
+        return new Promise((resolve, reject) => {
+            pool.query("SELECT sectionID FROM Sections WHERE venueName=? AND sectionName = ?", [venueName, sectionName], (error, rows) => {
+                if (error) { return reject(error); }
+                if (rows) {
+                    return resolve(rows); 
+                } else {
+                    return resolve(false);
+                }
+            });
+        });
+    }
+
     let response = undefined
     try{
         const can_create = await deleteExistingBlocks(event.showID);
@@ -45,7 +72,9 @@ exports.handler = async (event) => {
                 let newBlocks = event.blocks
 
                 for(let i = 0; i < newBlocks.length; i++){
-                    let addresult = await createBlock(event.showID, newBlocks[i].startRow, newBlocks[i].endRow, newBlocks[i].price, newBlocks[i].sectionID);
+                    let venue = await venueInformation(event.showID);
+                    let sectionID = await findSection(venue[0].venueName, newBlocks[i].sectionName);
+                    let addresult = await createBlock(event.showID, newBlocks[i].startRow, newBlocks[i].endRow, newBlocks[i].price, sectionID);
                     if(!addresult){
                         response = {
                             statusCode : 400,
